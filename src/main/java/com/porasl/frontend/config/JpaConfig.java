@@ -13,7 +13,7 @@ public class JpaConfig {
     private final DataSource dataSource;
 
     public JpaConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
+        this.dataSource = dataSource; 
     }
 
     @Bean
