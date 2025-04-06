@@ -17,7 +17,7 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody Map<String, Object> userData) {
-        String url = "http://localhost:8081/registration"; 
+        String url = "http://localhost:8081/registration";
 
         ResponseEntity<String> response = restTemplate.postForEntity(url, userData, String.class);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
