@@ -1,0 +1,20 @@
+npm install
+
+//Instead of calling vite directly run
+npm run dev   
+
+This uses the local version of Vite specified in devDependencies.
+
+Optional) Install Vite globally
+If you really want to use vite directly in terminal:
+
+npm install -g vite
+
+rm -rf node_modules package-lock.json
+npm install
+
+npm run build
+
+
+mvn spring-boot:run  
+
