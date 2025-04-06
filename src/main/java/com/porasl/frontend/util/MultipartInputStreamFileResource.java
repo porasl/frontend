@@ -21,6 +21,6 @@ public class MultipartInputStreamFileResource extends InputStreamResource {
 
     @Override
     public long contentLength() throws IOException {
-        return -1; // We don't know the size beforehand
+        return -1; //We don't know the size beforehand
     }
 }
