@@ -13,6 +13,7 @@ import com.porasl.frontend.FrontendApplication;
 				org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class,
 				org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class
 		})
+
 @ComponentScan(basePackages = "com.porasl.frontend")
 public class FrontendApplication extends SpringBootServletInitializer {
     @Override

@@ -31,7 +31,7 @@ public class UploadController {
         try {
 			body.add("file", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
 

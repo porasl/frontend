@@ -17,6 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
+    
 
     // Optional: Serve index.html for React Router on direct URL access
     @Override
