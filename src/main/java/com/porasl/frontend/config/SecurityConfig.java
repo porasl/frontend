@@ -8,9 +8,9 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -27,25 +27,48 @@ public class SecurityConfig {
         );
     }
 
-    
+ 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+       http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/resources/**", "/registration", "/activate", "/forgot-password", "/webrtc").permitAll()
+                .requestMatchers(
+                    "/frontend/assets/**",         // Allow React built JS/CSS/images
+                    "/frontend/**/*.js",           // JS files
+                    "/frontend/**/*.css",          // CSS files
+                    "/frontend/**/*.map",          // Source maps
+                    "/frontend/**/*.json",         // JSON files
+                    "/frontend/favicon.ico",       // Favicon
+                    "/frontend/manifest.json",     // PWA support
+                    "/frontend/index.html",        // Main entry point
+                    "/api/**",                     // API routes
+                    "/registration",               // Registration
+                    "/activate",                   // Activation
+                    "/forgot-password",            // Forgot Password
+                    "/webrtc"                      // WebRTC endpoint
+                ).permitAll() 
                 .anyRequest().authenticated()
             )
+            .headers(headers -> headers
+                .xssProtection(xss -> xss.disable()) // Optional: Adjust as needed
+                .contentTypeOptions(contentType -> contentType.disable()) // Disable "nosniff" (optional)
+            )
             .formLogin(form -> form
-                .loginPage("/index.html")
+                .loginPage("/frontend/index.html") // Let React handle login page
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .permitAll()
-            );
+            )
+            .csrf(csrf -> csrf.disable()); // Optional: Disable CSRF for development/testing
+   
         return http.build();
     }
 
+
+
+        
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -61,6 +84,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // much better than NoOp
+        return new BCryptPasswordEncoder();
     }
 }
