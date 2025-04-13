@@ -27,48 +27,40 @@ public class SecurityConfig {
         );
     }
 
- 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-       http
+        http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/frontend/assets/**",         // Allow React built JS/CSS/images
-                    "/frontend/**/*.js",           // JS files
-                    "/frontend/**/*.css",          // CSS files
-                    "/frontend/**/*.map",          // Source maps
-                    "/frontend/**/*.json",         // JSON files
-                    "/frontend/favicon.ico",       // Favicon
-                    "/frontend/manifest.json",     // PWA support
-                    "/frontend/index.html",        // Main entry point
-                    "/api/**",                     // API routes
-                    "/registration",               // Registration
-                    "/activate",                   // Activation
-                    "/forgot-password",            // Forgot Password
-                    "/webrtc"                      // WebRTC endpoint
-                ).permitAll() 
+                    "/frontend/assets/**",
+                    "/frontend/**/*.js",
+                    "/frontend/**/*.css",
+                    "/frontend/**/*.map",
+                    "/frontend/**/*.json",
+                    "/frontend/favicon.ico",
+                    "/frontend/index.html",
+                    "/frontend/manifest.json",
+                    "/registration",
+                    "/activate",
+                    "/forgot-password",
+                    "/webrtc",
+                    "/api/public/**" // optional: public API routes
+                ).permitAll()
                 .anyRequest().authenticated()
             )
-            .headers(headers -> headers
-                .xssProtection(xss -> xss.disable()) // Optional: Adjust as needed
-                .contentTypeOptions(contentType -> contentType.disable()) // Disable "nosniff" (optional)
-            )
             .formLogin(form -> form
-                .loginPage("/frontend/index.html") // Let React handle login page
+                .loginPage("/frontend/index.html") // React handles login view
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .permitAll()
             )
-            .csrf(csrf -> csrf.disable()); // Optional: Disable CSRF for development/testing
-   
+            .csrf(csrf -> csrf.disable()); // You can enable this in production with token setup
+
         return http.build();
     }
 
-
-
-        
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

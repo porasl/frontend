@@ -1,10 +1,7 @@
 package com.porasl.frontend.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,18 +18,16 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/frontend/assets/**")
-                .addResourceLocations("classpath:/static/frontend/assets/")
-                .setCachePeriod(3600); // Optional: set cache period for static resources
-    }
-
-
-
-    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-    	registry.addViewController("/frontend/{spring:[a-zA-Z0-9-_]+}/**{spring:?!(\\.js|\\.css|\\.map|\\.ico|\\.png|\\.jpg|\\.jpeg|\\.svg|\\.woff2?|\\.ttf|\\.json|\\.txt|\\.html)$}")
-        .setViewName("forward:/frontend/index.html");
+        // ✅ Forward React routes only — do NOT forward static asset requests
+
+        registry.addViewController("/frontend/{spring:[a-zA-Z0-9-_]+}")
+                .setViewName("forward:/frontend/index.html");
+
+        registry.addViewController("/frontend/{spring:[a-zA-Z0-9-_]+}/**{spring:[a-zA-Z0-9-_]+}")
+                .setViewName("forward:/frontend/index.html");
+
+        // ❗NO forwarding for /frontend/assets/** or any file-like URL
+        // That allows .js, .css, etc. to be served with proper MIME type
     }
 }
-
