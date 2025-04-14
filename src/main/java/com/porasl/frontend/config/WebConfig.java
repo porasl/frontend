@@ -16,18 +16,15 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
-
+    
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // ✅ Forward React routes only — do NOT forward static asset requests
-
-        registry.addViewController("/frontend/{spring:[a-zA-Z0-9-_]+}")
+        registry.addViewController("/frontend/{path:^(?!assets|.*\\..*).*$}")
                 .setViewName("forward:/frontend/index.html");
 
-        registry.addViewController("/frontend/{spring:[a-zA-Z0-9-_]+}/**{spring:[a-zA-Z0-9-_]+}")
+        registry.addViewController("/frontend/**/{path:^(?!assets|.*\\..*).*$}")
                 .setViewName("forward:/frontend/index.html");
-
-        // ❗NO forwarding for /frontend/assets/** or any file-like URL
-        // That allows .js, .css, etc. to be served with proper MIME type
     }
+
+  
 }
