@@ -10,7 +10,7 @@ export default function App() {
         <Route path="/" element={<Landing />} /> {/* ✅ Landing page at /frontend */}
         <Route path="/register" element={<Register />} />
         <Route path="/upload" element={<Upload />} />
-        <Route path="*" element={<Navigate to="/" />} /> {/* ✅ fallback to Landing */}
+		<Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>
     </BrowserRouter>
   );
