@@ -14,7 +14,7 @@
     <groupId>com.porasl</groupId>
     <artifactId>frontend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>frontend</name>
     <description>Frontend service with React UI</description>
@@ -30,7 +30,22 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Security (if needed) -->
+       <dependency>
+    	<groupId>org.springframework.boot</groupId>
+    	<artifactId>spring-boot-starter-web</artifactId>
+	  </dependency>
+
+	<dependency>
+    	<groupId>org.apache.tomcat.embed</groupId>
+    	<artifactId>tomcat-embed-jasper</artifactId>
+	</dependency>
+
+	<dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jstl</artifactId>
+        <version>1.2</version>
+    </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>

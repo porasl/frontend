@@ -29,34 +29,33 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/frontend/assets/**",
-                    "/frontend/**/*.js",
-                    "/frontend/**/*.css",
-                    "/frontend/**/*.map",
-                    "/frontend/**/*.json",
-                    "/frontend/favicon.ico",
-                    "/frontend/index.html",
-                    "/frontend/manifest.json",
-                    "/registration",
-                    "/activate",
-                    "/forgot-password",
-                    "/webrtc",
-                    "/api/public/**" // optional: public API routes
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/frontend/index.html") // React handles login view
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .permitAll()
-            )
-            .csrf(csrf -> csrf.disable()); // You can enable this in production with token setup
+    	http
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(
+            	"/resources/**",
+                "/index.html",
+                "/css/**", 
+                "/js/**", 
+                "/images/**",
+                "/registration", 
+                "/forgot-password", 
+                "/activate",
+                "/api/public/**"
+            ).permitAll()
+            .anyRequest().authenticated()
+        )
+        .formLogin(form -> form
+            .loginPage("/index.html")               // Redirect here instead of /login
+            .loginProcessingUrl("/login")           // Form posts to this URL
+            .defaultSuccessUrl("/", true)
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            .permitAll()
+        )
+        .csrf(csrf -> csrf.disable());
+
 
         return http.build();
     }
