@@ -12,6 +12,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -37,6 +39,7 @@ public class SecurityConfig {
                 "/css/**", 
                 "/js/**", 
                 "/images/**",
+                "/api/register/**",
                 "/registration", 
                 "/forgot-password", 
                 "/activate",
@@ -76,5 +79,13 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
+    public HttpFirewall allowSemiColonFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        // Enable semi-colons in URLs
+        firewall.setAllowSemicolon(true);
+        return firewall;
     }
 }
