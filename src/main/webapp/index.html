@@ -104,9 +104,11 @@
         <div class="modal-header"><h5 class="modal-title">Create Account</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
         <div class="modal-body">
           <form id="registerForm" method="POST" action="http://localhost:8082/api/register">
-            <input type="text" class="form-control mb-2" name="username" placeholder="Username" required>
-            <input type="email" class="form-control mb-2" name="email" placeholder="Email" required>
+            <input type="text" class="form-control mb-2" name="firstName" placeholder="First Name" required>
+            <input type="text" class="form-control mb-2" name="lastName" placeholder="Last Name" required>
             <input type="password" class="form-control mb-2" name="password" placeholder="Password" required>
+            <input type="password" class="form-control mb-2" name="confirmPassword" placeholder="Confirm Password" required>
+            <input type="email" class="form-control mb-2" name="email" placeholder="Email" required>
             <button type="submit" class="btn btn-primary w-100">Register</button>
           </form>
         </div>
