@@ -8,11 +8,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // ⚠️ This line forwards all React SPA routes except static assets
         registry.addViewController("/frontend/{spring:[^\\.]*}")
                 .setViewName("forward:/frontend/index.html");
 
         registry.addViewController("/frontend/**/{spring:[^\\.]*}")
                 .setViewName("forward:/frontend/index.html");
+        registry.addViewController("/frontend/{spring:(?!api).*}")
+        .setViewName("forward:/frontend/index.html");
+
+        registry.addViewController("/frontend/**/{spring:(?!api).*}")
+        .setViewName("forward:/frontend/index.html");
     }
 }
