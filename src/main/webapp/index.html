@@ -97,7 +97,7 @@
           <h5 class="modal-title">Create Account</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="registerModalBody">
           <form id="registerForm">
             <input type="text" class="form-control mb-2" name="firstname" placeholder="First Name" required>
             <input type="text" class="form-control mb-2" name="lastname" placeholder="Last Name" required>
@@ -107,7 +107,6 @@
             <input type="text" class="form-control mb-2" name="role" placeholder="USER" required>
             <button type="submit" class="btn btn-primary w-100">Register</button>
           </form>
-          <div id="registrationSuccessMessage" class="mt-3" style="display: none;"></div>
         </div>
       </div>
     </div>
@@ -152,12 +151,16 @@
   <!-- JavaScript -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      // Ensure Bootstrap modals are properly initialized
       ['forgotModal', 'activateModal'].forEach(id => {
         const modal = document.getElementById(id);
         if (modal) new bootstrap.Modal(modal);
       });
 
+      // Registration Form AJAX Submission Fix
       const registerForm = document.getElementById("registerForm");
+      const registerModalBody = document.getElementById("registerModalBody");
+
       if (registerForm) {
         registerForm.addEventListener("submit", function (event) {
           event.preventDefault();
@@ -170,14 +173,15 @@
           })
           .then(response => response.ok ? response.json() : Promise.reject(response))
           .then(() => {
-            registerForm.style.display = "none";
-            document.getElementById("registrationSuccessMessage").innerHTML = `
+            registerModalBody.innerHTML = `
               <div class="alert alert-success text-center">
-                Registration successful! An activation email has been sent to <strong>${formData.email}</strong>.
+                <strong>User is created!</strong> An email has been sent to <strong>${formData.email}</strong> with activation instructions.
               </div>
             `;
           })
-          .catch(() => alert("Registration failed."));
+          .catch(() => {
+            alert("Registration failed. Please try again.");
+          });
         });
       }
     });
