@@ -113,24 +113,56 @@
     </div>
   </div>
 
+  <!-- Forgot Password Modal -->
+  <div class="modal fade" id="forgotModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Forgot Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="forgotPasswordForm">
+            <input type="email" class="form-control mb-2" name="email" placeholder="Enter your email" required>
+            <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activate Account Modal -->
+  <div class="modal fade" id="activateModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Activate Account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="activateAccountForm">
+            <input type="text" class="form-control mb-2" name="activationCode" placeholder="Enter Activation Code" required>
+            <button type="submit" class="btn btn-success w-100">Activate Account</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- JavaScript -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // Ensure registerForm exists before adding event listener
+      ['forgotModal', 'activateModal'].forEach(id => {
+        const modal = document.getElementById(id);
+        if (modal) new bootstrap.Modal(modal);
+      });
+
       const registerForm = document.getElementById("registerForm");
       if (registerForm) {
         registerForm.addEventListener("submit", function (event) {
           event.preventDefault();
-  
-          const formData = {
-            firstname: document.querySelector("[name='firstname']").value,
-            lastname: document.querySelector("[name='lastname']").value,
-            password: document.querySelector("[name='password']").value,
-            confirmPassword: document.querySelector("[name='confirmPassword']").value,
-            email: document.querySelector("[name='email']").value,
-            role: document.querySelector("[name='role']").value,
-          };
-  
+          const formData = Object.fromEntries(new FormData(registerForm));
+
           fetch("http://localhost:8082/api/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -144,35 +176,9 @@
                 Registration successful! An activation email has been sent to <strong>${formData.email}</strong>.
               </div>
             `;
-            document.getElementById("registrationSuccessMessage").style.display = "block";
           })
-          .catch(() => alert("Registration failed. Please try again."));
+          .catch(() => alert("Registration failed."));
         });
-      } else {
-        console.warn("Element #registerForm not found!");
-      }
-
-      // Initialize HLS.js for 6 videos
-      if (window.Hls && Hls.isSupported()) {
-        const videos = [
-          { id: "video1", src: "https://inrik.com/video/sport/1/stream.m3u8" },
-          { id: "video2", src: "https://inrik.com/video/sport/2/stream.m3u8" },
-          { id: "video3", src: "https://inrik.com/video/nature/3/stream.m3u8" },
-          { id: "video4", src: "https://inrik.com/video/sport/4/stream.m3u8" },
-          { id: "video5", src: "https://inrik.com/video/sport/5/stream.m3u8" },
-          { id: "video6", src: "https://inrik.com/video/nature/6/stream.m3u8" }
-        ];
-
-        videos.forEach(({ id, src }) => {
-          const videoElement = document.getElementById(id);
-          if (videoElement) {
-            const hls = new Hls();
-            hls.loadSource(src);
-            hls.attachMedia(videoElement);
-          }
-        });
-      } else {
-        console.error("HLS.js is not supported in this browser.");
       }
     });
   </script>
