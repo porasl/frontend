@@ -10,22 +10,72 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/resources/js/bootstrap/5.3/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <style>
+    #topLinksWrapper {
+      min-height: 80px;
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .top-link {
+      font-weight: 500;
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .top-link:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    .rail-video {
+      width: 140px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .rail-video:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+    }
+  </style>
 </head>
 
 <body>
   <div class="container-fluid">
     <!-- Header -->
-    <div class="row top-row align-items-center">
+    <div class="row top-row align-items-center justify-content-center text-center">
       <div class="col-auto">
         <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo">
       </div>
-      <div class="col top-links">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Create Account</a>
-        <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal">Forgot Password</a>
-        <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal">Activate Account</a>
+
+      <!-- Top Links Wrapper -->
+      <div class="col" id="topLinksWrapper">
+        <!-- Logged out: Top Links -->
+        <div id="topLinksSection" class="d-flex align-items-center gap-3">
+          <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" class="top-link">Create Account</a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal" class="top-link">Forgot Password</a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal" class="top-link">Activate Account</a>
+        </div>
+
+        <!-- Logged in: Rail Videos -->
+        <div id="railVideosSection" class="d-none d-flex align-items-center gap-2 flex-wrap">
+          <video id="railVideo1" src="resources/videos/rail1.mp4" controls class="rail-video"></video>
+          <video id="railVideo2" src="resources/videos/rail2.mp4" controls class="rail-video"></video>
+          <video id="railVideo3" src="resources/videos/rail3.mp4" controls class="rail-video"></video>
+        </div>
       </div>
+
+      <!-- Login and User Info -->
       <div class="col-auto">
-        <!-- Login Section -->
         <div id="loginSection" class="login-form">
           <form id="loginForm">
             <input name="email" type="text" class="form-control form-control-sm" placeholder="Email" required>
@@ -34,7 +84,6 @@
           </form>
         </div>
 
-        <!-- User Info Section -->
         <div id="userSection" class="d-none">
           <div class="d-flex align-items-center">
             <span id="userName" class="me-2 fw-bold"></span>
@@ -48,7 +97,6 @@
   <!-- Video Section -->
   <div class="container py-3">
     <div class="row g-3">
-      <!-- Video Cards (6 videos) -->
       <div class="col-md-4">
         <div class="card video-card">
           <div class="card-body">
@@ -101,6 +149,7 @@
   </div>
 
   <!-- Modals -->
+  <!-- Register Modal -->
   <div class="modal fade" id="registerModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -159,116 +208,113 @@
     </div>
   </div>
 
-  <!-- JavaScript for login/logout -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {    ['forgotModal', 'activateModal'].forEach(id => {
-         const modal = document.getElementById(id);
-         if (modal) new bootstrap.Modal(modal);
-       });
+  <!-- JavaScript -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  ['forgotModal', 'activateModal'].forEach(id => {
+    const modal = document.getElementById(id);
+    if (modal) new bootstrap.Modal(modal);
+  });
 
-       // Registration Form AJAX Submission Fix
-       const registerForm = document.getElementById("registerForm");
-       const registerModalBody = document.getElementById("registerModalBody");
+  const registerForm = document.getElementById("registerForm");
+  const registerModalBody = document.getElementById("registerModalBody");
+  const loginForm = document.getElementById("loginForm");
+  const loginSection = document.getElementById("loginSection");
+  const userSection = document.getElementById("userSection");
+  const userNameSpan = document.getElementById("userName");
+  const logoutIcon = document.getElementById("logoutIcon");
+  const topLinksSection = document.getElementById("topLinksSection");
+  const railVideosSection = document.getElementById("railVideosSection");
 
-       if (registerForm) {
-         registerForm.addEventListener("submit", function (event) {
-           event.preventDefault();
-           const formData = Object.fromEntries(new FormData(registerForm));
+  if (registerForm) {
+    registerForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const formData = Object.fromEntries(new FormData(registerForm));
 
-           fetch("http://localhost:8082/api/register", {
-             method: "POST",
-             headers: { "Content-Type": "application/json" },
-             body: JSON.stringify(formData),
-           })
-           .then(response => response.ok ? response.json() : Promise.reject(response))
-           .then(() => {
-             registerModalBody.innerHTML = `
-               <div class="alert alert-success text-center">
-                 <strong>User is created!</strong> An email has been sent to <strong>${formData.email}</strong> with activation instructions.
-               </div>
-             `;
-           })
-           .catch(() => {
-             alert("Registration failed. Please try again.");
-           });
-         });
-       }
-      const loginForm = document.getElementById("loginForm");
-      const loginSection = document.getElementById("loginSection");
-      const userSection = document.getElementById("userSection");
-      const userNameSpan = document.getElementById("userName");
-      const logoutIcon = document.getElementById("logoutIcon");
-
-      // Function to update login/logout UI
-      function updateUI() {
-        const token = localStorage.getItem("token");
-        const userName = localStorage.getItem("userName");
-
-        if (token && userName) {
-          loginSection.classList.add("d-none");
-          userSection.classList.remove("d-none");
-          userNameSpan.textContent = userName;
-        } else {
-          loginSection.classList.remove("d-none");
-          userSection.classList.add("d-none");
-          userNameSpan.textContent = "";
+      fetch("http://localhost:8082/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(data => { throw new Error(data.message || "Registration failed."); });
         }
-      }
-
-      // Login form submit
-      if (loginForm) {
-        loginForm.addEventListener("submit", function (event) {
-          event.preventDefault();
-
-          const formData = new FormData(loginForm);
-          const email = formData.get("email");
-          const password = formData.get("password");
-
-          fetch("http://localhost:8080/auth/authenticate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-          })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error("Invalid login credentials");
-            }
-            return response.json();
-          })
-          .then(data => {
-            localStorage.setItem("token", data.access_token);
-            localStorage.setItem("refresh_token", data.refresh_token);
-            localStorage.setItem("userName", email); // Save the email as username
-
-            updateUI();
-
-            // Optionally redirect after login
-            window.location.href = "/dashboard";
-          })
-          .catch(error => {
-            console.error("Login failed:", error);
-            alert("Login failed. Please check your credentials.");
-          });
-        });
-      }
-
-      // Logout icon click
-      if (logoutIcon) {
-        logoutIcon.addEventListener("click", function () {
-          localStorage.removeItem("token");
-          localStorage.removeItem("refresh_token");
-          localStorage.removeItem("userName");
-
-          updateUI();
-
-          // Optionally reload page
-          window.location.href = "/";
-        });
-      }
-
-      // Initial UI setup
-      updateUI();
+        return response.json();
+      })
+      .then(() => {
+        registerModalBody.innerHTML = `<div class="alert alert-success text-center"><strong>User is created!</strong> An email has been sent to <strong>${formData.email}</strong> with activation instructions.</div>`;
+      })
+      .catch(error => {
+        console.error("Registration error:", error);
+        alert(error.message || "Registration failed. Please try again.");
+      });
     });
-  </script>
+  }
+
+  function updateUI() {
+    const token = localStorage.getItem("token");
+    const userName = localStorage.getItem("userName");
+
+    if (token && userName) {
+      loginSection.classList.add("d-none");
+      userSection.classList.remove("d-none");
+      userNameSpan.textContent = userName;
+      topLinksSection.classList.add("d-none");
+      railVideosSection.classList.remove("d-none");
+    } else {
+      loginSection.classList.remove("d-none");
+      userSection.classList.add("d-none");
+      userNameSpan.textContent = "";
+      topLinksSection.classList.remove("d-none");
+      railVideosSection.classList.add("d-none");
+    }
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const formData = new FormData(loginForm);
+      const email = formData.get("email");
+      const password = formData.get("password");
+
+      fetch("http://localhost:8080/auth/authenticate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Invalid login credentials");
+        }
+        return response.json();
+      })
+      .then(data => {
+        localStorage.setItem("token", data.access_token);
+        localStorage.setItem("refresh_token", data.refresh_token);
+        localStorage.setItem("userName", email);
+        updateUI();
+        window.location.href = "/dashboard";
+      })
+      .catch(error => {
+        console.error("Login failed:", error);
+        alert("Login failed. Please check your credentials.");
+      });
+    });
+  }
+
+  if (logoutIcon) {
+    logoutIcon.addEventListener("click", function () {
+      localStorage.removeItem("token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("userName");
+      updateUI();
+      window.location.href = "/";
+    });
+  }
+
+  updateUI();
+});
+</script>
 </body>
 </html>
