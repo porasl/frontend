@@ -24,9 +24,10 @@
         <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal">Activate Account</a>
       </div>
       <div class="col-auto login-form">
-        <form id="loginForm">
-          <input name="email" type="text" class="form-control form-control-sm" placeholder="Email" required>
-          <input name="password" type="password" class="form-control form-control-sm" placeholder="Password" required>
+        <form method="POST" action="${contextPath}/login">
+          <input name="username" type="text" class="form-control form-control-sm" placeholder="Username">
+          <input name="password" type="password" class="form-control form-control-sm" placeholder="Password">
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
           <button class="btn btn-sm btn-primary" type="submit">Login</button>
         </form>
       </div>
@@ -36,6 +37,7 @@
   <!-- Video Section -->
   <div class="container py-3">
     <div class="row g-3">
+      <!-- Render 6 Video Cards -->
       <div class="col-md-4">
         <div class="card video-card">
           <div class="card-body">
@@ -155,7 +157,7 @@
         if (modal) new bootstrap.Modal(modal);
       });
 
-      // Registration Form AJAX Submission
+      // Registration Form AJAX Submission Fix
       const registerForm = document.getElementById("registerForm");
       const registerModalBody = document.getElementById("registerModalBody");
 
