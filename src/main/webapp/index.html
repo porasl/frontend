@@ -17,6 +17,7 @@
       margin: 0;
       padding: 0;
     }
+    
     .tabs {
       display: flex;
       background-color: #333;
@@ -75,21 +76,44 @@
       box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
     }
     
-    .tabs.navbar {
-        width: fit-content;
-        margin: 1px auto;
-        padding: 10px 10px;
-        border-radius: 8px;
-        padding: 5px 5px;
-        text-align: center;
-        text-decoration: none;
-        transition: background 0.3s;
-        background-color: white !important;
-        color: #007bff;
-        padding-top: 4px;
-        padding-bottom: 4px;
-    }
-    
+.tabs.navbar {
+  background-color: white !important;
+  color: #007bff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 1140px; /* or 960px for tighter */
+  width: 100%;
+  padding: 2px 12px;
+  margin-top: 0 !important;
+}
+ 
+ 
+.tabs.navbar li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tabs.navbar a {
+  color: #007bff !important;
+  text-decoration: none;
+  padding: 6px 12px;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+.tabs.navbar a:hover,
+.tabs.navbar a.active {
+  background-color: #e6f0ff;
+  color: #0056b3 !important;
+}
+
+    .tabs.navbar .logo {
+  height: 36px;
+  margin-right: 6px;
+}
     .tabs.navbar li {
         list-style: none;
         margin: 0;
@@ -106,12 +130,24 @@
         color: #007bff !important;
     }
     
+    @media (max-width: 576px) {
+  .tabs.navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tabs.navbar .logo {
+    align-self: flex-end;
+    margin-top: 10px;
+  }
+}
+    
   </style>
 </head>
 
 <body>
 
-<nav class="tabs navbar">      
+<nav class="tabs navbar d-flex justify-content-between align-items-center flex-wrap w-100">     
    <div id="topLinksSection" class="d-flex align-items-center gap-3">
    <li class="nav-item">
       <a class="navbar-brand d-flex" href="index.html">  
@@ -145,13 +181,14 @@
           <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;" style="align:left" class="me-2">
            
            <li class="nav-item">
-          <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" 
+          <a href="#" data-bs-toggle="modal" data-bs-target="#myContent" 
                class="top-link">My Contents</a>
         </li>
         <li class="nav-item">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal" class="top-link">Bazaar Today</a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#bazaartoday" class="top-link">Bazaar Today</a>
         </li>
-           <li class="nav-item"> 
+        
+          <li class="nav-item" style="align:right"> 
             <span id="userName" class="me-2"></span>
           </li>
           
