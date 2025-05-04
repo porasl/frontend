@@ -23,7 +23,7 @@
     }
     .tabs a {
       flex: 1;
-      padding: 14px 20px;
+      padding: 10px 30px;
       color: white;
       text-align: center;
       text-decoration: none;
@@ -36,11 +36,11 @@
       background-color: #007bff;
     }
     .content {
-      padding: 20px;
+      padding: 10px;
     }
     
     #topLinksWrapper {
-      min-height: 80px;
+      min-height: 10px;
       padding: 10px 0;
       display: flex;
       justify-content: center;
@@ -77,13 +77,25 @@
 </head>
 
 <body>
-<nav class="tabs">      
+<nav class="tabs navbar">      
    <div id="topLinksSection" class="d-flex align-items-center gap-3">
-      <a href="index.html">  
-                <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo">
-          <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" class="top-link">Create Account</a>
-          <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal" class="top-link">Forgot Password</a>
-          <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal" class="top-link">Activate Account</a>
+ <li class="nav-item">
+          <a class="navbar-brand d-flex" href="index.html">  
+             <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;" class="me-2"></a></li>
+ 
+ <li class="nav-item">
+          <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" 
+               class="top-link">Create Account</a>
+  </li>
+
+<li class="nav-item">
+     <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal"  class="top-link">Forgot Password</a>
+   </li>
+  
+  <li class="nav-item">
+    <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal"
+     class="top-link">Activate Account</a>
+   </li>
         </div>
 
       <!-- Login and User Info -->
