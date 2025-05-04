@@ -74,32 +74,62 @@
       transform: scale(1.05);
       box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
     }
+    
+    .tabs.navbar {
+        width: fit-content;
+        margin: 1px auto;
+        padding: 10px 10px;
+        border-radius: 8px;
+        padding: 5px 5px;
+        text-align: center;
+        text-decoration: none;
+        transition: background 0.3s;
+        background-color: white !important;
+        color: #007bff;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+    
+    .tabs.navbar li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .tabs.navbar ul,
+    .tabs.navbar li {
+        margin: 0;
+        padding: 0;
+    }
+
+    .tabs.navbar a {
+        color: #007bff !important;
+    }
+    
   </style>
 </head>
 
 <body>
+
 <nav class="tabs navbar">      
    <div id="topLinksSection" class="d-flex align-items-center gap-3">
- <li class="nav-item">
-          <a class="navbar-brand d-flex" href="index.html">  
-             <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;" class="me-2"></a></li>
- 
- <li class="nav-item">
+   <li class="nav-item">
+      <a class="navbar-brand d-flex" href="index.html">  
+             <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;"   class="me-2"></a></li>
+     <li class="nav-item">
           <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" 
                class="top-link">Create Account</a>
-  </li>
-
-<li class="nav-item">
-     <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal"  class="top-link">Forgot Password</a>
    </li>
-  
+    <li class="nav-item">
+      <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal"  class="top-link">Forgot Password</a>
+   </li>
   <li class="nav-item">
     <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal"
      class="top-link">Activate Account</a>
    </li>
         </div>
 
-      <!-- Login and User Info -->
+      
       <div class="col-auto" style="padding-right:10px">
         <div id="loginSection" class="login-form">
           <form id="loginForm">
@@ -109,16 +139,28 @@
           </form>
         </div>
 
-        <div id="userSection" class="d-none">
-          <div class="d-flex align-items-center">
+        <div id="userSection" class="d-none d-flex align-items-center gap-3">
+          <div class="d-flex">
           
-          <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo">
-            <span id="userName" class="me-2 fw-bold"></span>
+          <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;" style="align:left" class="me-2">
+           
+           <li class="nav-item">
+          <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" 
+               class="top-link">My Contents</a>
+        </li>
+        <li class="nav-item">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal" class="top-link">Bazaar Today</a>
+        </li>
+           <li class="nav-item"> 
+            <span id="userName" class="me-2"></span>
+          </li>
+          
+          <li class="nav-item"> 
             <img id="logoutIcon" src="resources/images/logout.png" alt="Logout" style="width:24px; height:24px; cursor:pointer;">
+            </li>
           </div>
         </div>
       </div>
-  </a>
   </nav>
   <div class="container-fluid">
     <!-- Header -->
