@@ -12,42 +12,77 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <style>
-    body{
-    font-family: sans-serif;
+    html, body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #app-container {
+      display: flex;
+      height: 100%;
+      margin-top: 56px; /* leave space for fixed navbar */
+    }
+
+    .leftbar {
+      width: 200px;
+      background-color: #f5f5f5;
+      border-right: 1px solid #ddd;
+      padding: 1rem;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+      position: fixed;
+      top: 56px;
+      bottom: 0;
+      overflow: hidden;
+    }
+
+    .main-content {
+      margin-left: 200px;
+      padding: 1rem;
+      height: calc(100% - 56px);
+      overflow-y: auto;
+      width: calc(100% - 200px);
+    }
+
+    .tabs.navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1030;
+      background-color: white !important;
+      color: #007bff;
+      border-bottom: 1px solid #ddd;
+      border-radius: 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 6px 12px;
+    }
+
+    .tabs.navbar li {
+      list-style: none;
       margin: 0;
       padding: 0;
     }
-    
-    .tabs {
-      display: flex;
-      background-color: #333;
-    }
-    .tabs a {
-      flex: 1;
-      padding: 10px 30px;
-      color: white;
-      text-align: center;
+
+    .tabs.navbar a {
+      color: #007bff !important;
       text-decoration: none;
-      transition: background 0.3s;
+      padding: 6px 12px;
+      font-weight: 500;
+      border-radius: 4px;
     }
-    .tabs a:hover {
-      background-color: #555;
+
+    .tabs.navbar a:hover,
+    .tabs.navbar a.active {
+      background-color: #e6f0ff;
+      color: #0056b3 !important;
     }
-    .tabs a.active {
-      background-color: #007bff;
-    }
-    .content {
-      padding: 10px;
-    }
-    
-    #topLinksWrapper {
-      min-height: 30px;
-      padding: 10px 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
+
+    .tabs.navbar .logo {
+      height: 36px;
+      margin-right: 6px;
     }
 
     .top-link {
@@ -75,59 +110,26 @@
       transform: scale(1.05);
       box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
     }
-    
-.tabs.navbar {
-  background-color: white !important;
-  color: #007bff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 1140px; /* or 960px for tighter */
-  width: 100%;
-  padding: 2px 12px;
-  margin-top: 0 !important;
-}
- 
- 
-.tabs.navbar li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
 
-.tabs.navbar a {
-  color: #007bff !important;
-  text-decoration: none;
-  padding: 6px 12px;
-  font-weight: 500;
-  border-radius: 4px;
-}
+    @media (max-width: 576px) {
+      .tabs.navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
 
-.tabs.navbar a:hover,
-.tabs.navbar a.active {
-  background-color: #e6f0ff;
-  color: #0056b3 !important;
-}
+      .tabs.navbar .logo {
+        align-self: flex-end;
+        margin-top: 10px;
+      }
 
-    .tabs.navbar .logo {
-  height: 36px;
-  margin-right: 6px;
-}
-    .tabs.navbar li {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    
-    .tabs.navbar ul,
-    .tabs.navbar li {
-        margin: 0;
-        padding: 0;
-    }
+      .leftbar {
+        display: none;
+      }
 
-    .tabs.navbar a {
-        color: #007bff !important;
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+      }
     }
     
     @media (max-width: 576px) {
@@ -147,33 +149,27 @@
 
 <body>
 
-<nav class="tabs navbar d-flex justify-content-between align-items-center flex-wrap w-100">     
-   <div id="topLinksSection" class="d-flex align-items-center gap-3">
-   <li class="nav-item">
-      <a class="navbar-brand d-flex" href="index.html">  
-             <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;"   class="me-2"></a></li>
-     <li class="nav-item">
-          <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" 
-               class="top-link">Create Account</a>
-   </li>
-    <li class="nav-item">
-      <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal"  class="top-link">Forgot Password</a>
-   </li>
-  <li class="nav-item">
-    <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal"
-     class="top-link">Activate Account</a>
-   </li>
-        </div>
+  <!-- Navbar -->
+  <nav class="tabs navbar d-flex justify-content-between align-items-center flex-wrap w-100">
+    <div id="topLinksSection" class="d-flex align-items-center gap-3">
+      <li class="nav-item">
+        <a class="navbar-brand d-flex" href="index.html">
+          <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo">
+        </a>
+      </li>
+      <li class="nav-item"><a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" class="top-link">Create Account</a></li>
+      <li class="nav-item"><a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal" class="top-link">Forgot Password</a></li>
+      <li class="nav-item"><a href="#" data-bs-toggle="modal" data-bs-target="#activateModal" class="top-link">Activate Account</a></li>
+    </div>
 
-      
-      <div class="col-auto" style="padding-right:10px">
-        <div id="loginSection" class="login-form">
-          <form id="loginForm">
-            <input name="email" type="text" class="form-control form-control-sm" placeholder="Email" required>
-            <input name="password" type="password" class="form-control form-control-sm" placeholder="Password" required>
-            <button class="btn btn-sm btn-primary" type="submit">Login</button>
-          </form>
-        </div>
+    <div class="d-flex align-items-center gap-3">
+      <div id="loginSection" class="login-form">
+        <form id="loginForm">
+          <input name="email" type="text" class="form-control form-control-sm" placeholder="Email" required>
+          <input name="password" type="password" class="form-control form-control-sm" placeholder="Password" required>
+          <button class="btn btn-sm btn-primary" type="submit">Login</button>
+        </form>
+      </div>
 
         <div id="userSection" class="d-none d-flex align-items-center gap-3">
           <div class="d-flex">
@@ -198,14 +194,23 @@
           </div>
         </div>
       </div>
+    </div>
   </nav>
-  <div class="container-fluid">
-    <!-- Header -->
-    <div class="row top-row align-items-center justify-content-center text-center">
 
+  <!-- App Layout -->
+  <div id="app-container">
+    <!-- Sidebar -->
+    <div class="leftbar">
+      <h6>Navigation</h6>
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Videos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+      </ul>
+    </div>
 
       <!-- Top Links Wrapper -->
-     
+     <div class="main-content">
   
    <!-- Logged in: Rail Videos -->
         <div id="railVideosSection" class="d-none align-items-center gap-4 flex-wrap">
@@ -217,34 +222,35 @@
           <video id="railVideo5" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
           <video id="railVideo6" src="http://localhost:3000/videos/nika.mp4".mp4" controls class="rail-video"></video>
         </div>
+        
+       
 
   <!-- Video Section -->
-  <div class="container py-3">
-    <div class="row g-3">
-      <div class="col-md-4">
-        <div class="card video-card">
-          <div class="card-body">
-            <h6 class="card-title">Featured User Channel</h6>
-            <video id="video1" src="http://localhost:3000/videos/robin.mp4" controls class="w-100"></video>
-          </div>
+  <div class="row g-4">
+    <div class="col-12 col-md-6 col-xl-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="card-title">Featured User Channel</h6>
+          <video src="http://localhost:3000/videos/robin.mp4" controls class="w-100" style="max-height: 300px;"></video>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card video-card">
-          <div class="card-body">
-            <h6 class="card-title">Space Exploration</h6>
-            <video id="video2" src="http://localhost:3000/videos/long2.mp4" controls class="w-100"></video>
-          </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="card-title">Space Exploration</h6>
+          <video src="http://localhost:3000/videos/long2.mp4" controls class="w-100" style="max-height: 300px;"></video>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card video-card">
-          <div class="card-body">
-            <h6 class="card-title">Nature Wonders</h6>
-            <video id="video3" src="http://localhost:3000/videos/long1.mp4" controls class="w-100"></video>
-          </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="card-title">Nature Wonders</h6>
+          <video src="http://localhost:3000/videos/long1.mp4" controls class="w-100" style="max-height: 300px;"></video>
         </div>
       </div>
+    </div>
       <div class="col-md-4">
         <div class="card video-card">
           <div class="card-body">
@@ -267,10 +273,12 @@
             <h6 class="card-title">Flowers</h6>
             <video id="video6" src="http://localhost:3000/videos/flowers1.mp4" controls class="w-100"></video>
           </div>
+          <!-- Repeat similar video cards for others -->
         </div>
       </div>
     </div>
   </div>
+
 
   <!-- Modals -->
   <!-- Register Modal -->
