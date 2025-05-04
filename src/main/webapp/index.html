@@ -143,6 +143,32 @@
     margin-top: 10px;
   }
 }
+
+#railVideosSection {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-bottom: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #007bff #f1f1f1;
+}
+
+#railVideosSection::-webkit-scrollbar {
+  height: 8px;
+}
+
+#railVideosSection::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+  border-radius: 4px;
+}
+
+
+
+
+
+
     
   </style>
 </head>
@@ -170,8 +196,8 @@
           <button class="btn btn-sm btn-primary" type="submit">Login</button>
         </form>
       </div>
-
-        <div id="userSection" class="d-none d-flex align-items-center gap-3">
+     
+    <div id="userSection" class="d-none d-flex align-items-center gap-3">
           <div class="d-flex">
           
           <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;" style="align:left" class="me-2">
@@ -184,13 +210,18 @@
             <a href="#" data-bs-toggle="modal" data-bs-target="#bazaartoday" class="top-link">Bazaar Today</a>
         </li>
         
+          <li class="nav-item"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        </li>
+          <li class="nav-item"></li>
+          <li class="nav-item"></li>
+      
           <li class="nav-item" style="align:right"> 
-            <span id="userName" class="me-2"></span>
+            <font size=2><span id="userName" class="me-2"></span></font>
           </li>
           
           <li class="nav-item"> 
             <img id="logoutIcon" src="resources/images/logout.png" alt="Logout" style="width:24px; height:24px; cursor:pointer;">
             </li>
+           
           </div>
         </div>
       </div>
@@ -201,28 +232,30 @@
   <div id="app-container">
     <!-- Sidebar -->
     <div class="leftbar">
-      <h6>Navigation</h6>
       <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link" href="#">My Profile</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">My Contents</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Memory Notes</a></li>
+        <li class="nav-item"><a class="nav-link" href=""><img src="resources/images/video.png" width="50px"></a></li>
+        <li class="nav-item"><a class="nav-link" href=""><img src="resources/images/upload.png" width="50px"></a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><img src="resources/images/memoryNotes.png" width="50px"></a></li>
+                <li class="nav-item"><a class="nav-link" href=""><img src="resources/images/profile.png" width="50px"></a></li>
+
       </ul>
     </div>
 
-      <!-- Top Links Wrapper -->
+ 
      <div class="main-content">
   
-   <!-- Logged in: Rail Videos -->
-        <div id="railVideosSection" class="d-none align-items-center gap-4 flex-wrap">
+
+ 
+ 
+  <div id="railVideosSection">
           <video id="railVideo1" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
           <video id="railVideo2" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
           <video id="railVideo3" src="http://localhost:3000/videos/nika.mp4".mp4" controls class="rail-video"></video>
-          
           <video id="railVideo4" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
           <video id="railVideo5" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
           <video id="railVideo6" src="http://localhost:3000/videos/nika.mp4".mp4" controls class="rail-video"></video>
-        </div>
-        
+         </div>
+
        
 
   <!-- Video Section -->
@@ -447,6 +480,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateUI();
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const track = document.getElementById('railVideosSection');
+    const prevBtn = document.getElementById('rail-prev');
+    const nextBtn = document.getElementById('rail-next');
+
+    const getScrollAmount = () => {
+      const video = track.querySelector('.rail-video');
+      return video.offsetWidth + 16; // 16px = margin-right
+    };
+
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+  });
+
+
 </script>
 </body>
 </html>
