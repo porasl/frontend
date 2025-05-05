@@ -34,28 +34,34 @@
         </form>
       </div>
      
-    <div id="userSection" class="d-none d-flex align-items-center gap-3">
-          <div class="d-flex">
-          
-   <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;" style="align:left" class="me-2">
-           
-     <li class="nav-item">  <img src="resources/images/myContent.png" alt="My Contents" class="My Contents" style="height: 40px;" style="align:left" class="me-2">
-   <li class="nav-item">  <img src="resources/images/add.png" alt="Add" class="add" style="height: 40px;" style="align:left" class="me-2">
-     </li>
-       <li><strong></strong></li>
-     <li class="nav-item"><a href="#" class="top-link" onclick="showBazaar()">Bazaar Today</a></li>
-      
-     <li class="nav-item" style="align:right"> 
-            <font size=2><span id="userName" class="me-2"></span></font>
-          </li>
-          
-          <li class="nav-item"> 
-            <img id="logoutIcon" src="resources/images/logout.png" alt="Logout" style="width:24px; height:24px; cursor:pointer;">
-            </li>
-           
-          </div>
-        </div>
-      </div>
+<div id="userSection" class="d-none d-flex justify-content-between align-items-center w-100 px-3">
+  <!-- Left-aligned section -->
+  <div class="d-flex align-items-center gap-3">
+    <li>
+      <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo me-2" style="height: 40px;">
+    </li>
+    <li class="nav-item">
+      <img src="resources/images/myContent.png" alt="My Contents" class="me-2" style="height: 40px;">
+    </li>
+    <li class="nav-item">
+      <img src="resources/images/add.png" alt="Add" class="me-2" style="height: 40px;">
+    </li>
+    <li class="nav-item">
+      <a href="#" class="top-link" onclick="showBazaar()">Bazaar Today</a>
+    </li>
+  </div>
+
+  <!-- Right-aligned user info section -->
+  <div class="d-flex align-items-center gap-2">
+    <li class="nav-item">
+      <font size="2"><span id="userName" class="me-2"></span></font>
+    </li>
+    <li class="nav-item">
+      <img id="logoutIcon" src="resources/images/logout.png" alt="Logout" style="width:24px; height:24px; cursor:pointer;">
+    </li>
+  </div>
+</div>
+
     </div>
   </nav>
 
