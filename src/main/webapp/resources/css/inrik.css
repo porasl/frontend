@@ -9,6 +9,7 @@ html, body {
 #app-container {
   display: flex;
   height: 100%;
+ 
   margin-top: 56px;
 }
 
@@ -24,32 +25,13 @@ html, body {
   overflow: hidden;
 }
 
-.rightbar {
-      position: fixed;
-      top: 56px;
-      right: 0;
-      width: 200px;
-      height: calc(100% - 56px);
-      background-color: #f5f5f5;
-      border-left: 1px solid #ddd;
-      padding: 1rem;
-      box-shadow: -2px 0 5px rgba(0,0,0,0.05);
-      overflow-y: auto;
-    }
-    .rightbar ul {
-      list-style: none;
-      padding-left: 0;
-    }
-    .rightbar ul li {
-      margin-bottom: 10px;
-    }
-
 .main-content {
   margin-left: 120px;
+  
   padding: 0; /* Removed padding */
   height: calc(100% - 56px);
   overflow-y: auto;
-  width: calc(100% - 200px);
+  width: calc(150% - 200px);
 }
 
 .tabs.navbar {
@@ -145,11 +127,15 @@ html, body {
   padding-bottom: 10px;
   padding-top: 10px;
   margin-bottom: 1rem;
+  justify-content: center;
   scrollbar-width: thin;
   width: calc(100% - 220px);
-   margin-right: 220px;
+   margin-right: 150px;
   scrollbar-color: #007bff #f1f1f1;
 }
+
+
+
 
 #railVideosSection::-webkit-scrollbar {
   height: 8px;
@@ -225,13 +211,18 @@ html, body {
     height: auto;
   }
   
-  .video-scroll-wrapper {
+.video-scroll-wrapper {
   display: flex;
   align-items: center;
+  justify-content: center; /* centers inner content horizontally */
   gap: 10px;
   overflow: hidden;
   padding: 10px;
+  width: 800px;
+  margin-left: auto;      /* center the wrapper itself */
+  margin-right: auto;     /* center the wrapper itself */
 }
+
 
 .video-scroll-track {
   display: flex;
