@@ -146,6 +146,8 @@ html, body {
   padding-top: 10px;
   margin-bottom: 1rem;
   scrollbar-width: thin;
+  width: calc(100% - 220px);
+   margin-right: 220px;
   scrollbar-color: #007bff #f1f1f1;
 }
 
