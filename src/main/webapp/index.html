@@ -40,19 +40,10 @@
     <div id="userSection" class="d-none d-flex align-items-center gap-3">
           <div class="d-flex">
           
-          <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;" style="align:left" class="me-2">
+   <img src="resources/images/inrik_logo3_white.png" alt="Logo" class="logo" style="height: 40px;" style="align:left" class="me-2">
            
-           <li class="nav-item">
-          <a href="#" data-bs-toggle="modal" data-bs-target="#myContent" 
-               class="top-link">My Contents</a>
-        </li>
-        <li class="nav-item">
-            <li class="nav-item"><a href="#" class="top-link" onclick="showBazaar()">Bazaar Today</a>
-        </li>
-        
-          <li class="nav-item"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        </li>
-       
-          <li class="nav-item"></li>
+     <li class="nav-item">  <img src="resources/images/myContent.png" alt="Logo" class="logo" style="height: 60px;" style="align:left" class="me-2">
+     </li>
       
           <li class="nav-item" style="align:right"> 
             <font size=2><span id="userName" class="me-2"></span></font>
@@ -74,6 +65,7 @@
     
     <div class="leftbar">
       <ul class="nav flex-column">
+      <li class="nav-item"></li><br>
       <li class="nav-item"><a class="nav-link" href=""><img src="resources/images/home.png" width="40px"></a></li>
         <li class="nav-item"><a class="nav-link" href=""><img src="resources/images/video.png" width="40px"></a></li>
         <li class="nav-item"><a class="nav-link" href=""><img src="resources/images/cut.png" width="60px"></a></li>
@@ -87,14 +79,27 @@
 
 <div id="app-container">
   <div class="main-content">
+  
     <div id="railVideosSection">
-      <video id="railVideo1" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
-      <video id="railVideo2" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
-      <video id="railVideo3" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
-      <video id="railVideo4" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
-      <video id="railVideo5" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
-      <video id="railVideo6" src="http://localhost:3000/videos/nika.mp4" controls class="rail-video"></video>
+    <div class="video-scroll-wrapper">
+        <button class="scroll-btn" id="scroll-prev">&#9664;</button>
+        <div class="video-scroll-track" id="videoScrollTrack">
+      <video id="railVideo1" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo2" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo3" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo4" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo5" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo6" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo7" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo8" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo9" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo10" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo11" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
+      <video id="railVideo12" src="http://localhost:3000/videos/nika.mp4" controls class="scroll-video"></video>
          </div>
+        <button class="scroll-btn" id="scroll-next">&#9654;</button>
+    </div>
+    </div>
          
   <!-- Video Section -->
   <div class="row g-4">
@@ -150,7 +155,16 @@
     </div>
   </div>
 
+ <div class="rightbar">
+      <ul>
+        <li><strong></strong></li>
+        <li class="nav-item"><a href="#" class="top-link" onclick="showBazaar()">Bazaar Today</a></li>
 
+        <li><a href="#">Link 2</a></li>
+        <li><a href="#">Link 3</a></li>
+      </ul>
+    </div>
+    
   <!-- Modals -->
   <!-- Register Modal -->
   <div class="modal fade" id="registerModal" tabindex="-1">
@@ -329,24 +343,24 @@ function showBazaar() {
 	  document.getElementById("app-container").classList.remove("d-none");
 	}
 
-document.addEventListener('DOMContentLoaded', function () {
-    const track = document.getElementById('railVideosSection');
-    const prevBtn = document.getElementById('rail-prev');
-    const nextBtn = document.getElementById('rail-next');
+	document.addEventListener("DOMContentLoaded", function () {
+		  const scrollTrack = document.getElementById("videoScrollTrack");
+		  const prevBtn = document.getElementById("scroll-prev");
+		  const nextBtn = document.getElementById("scroll-next");
 
-    const getScrollAmount = () => {
-      const video = track.querySelector('.rail-video');
-      return video.offsetWidth + 16; // 16px = margin-right
-    };
+		  const scrollAmount = () => {
+		    const video = scrollTrack.querySelector(".scroll-video");
+		    return video.offsetWidth + 10; // gap is 10px
+		  };
 
-    nextBtn.addEventListener('click', () => {
-      track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-    });
+		  nextBtn.addEventListener("click", () => {
+		    scrollTrack.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+		  });
 
-    prevBtn.addEventListener('click', () => {
-      track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-    });
-  });
+		  prevBtn.addEventListener("click", () => {
+		    scrollTrack.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+		  });
+		});
 
 
 </script>

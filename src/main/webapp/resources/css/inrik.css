@@ -24,6 +24,26 @@ html, body {
   overflow: hidden;
 }
 
+.rightbar {
+      position: fixed;
+      top: 56px;
+      right: 0;
+      width: 200px;
+      height: calc(100% - 56px);
+      background-color: #f5f5f5;
+      border-left: 1px solid #ddd;
+      padding: 1rem;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+      overflow-y: auto;
+    }
+    .rightbar ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .rightbar ul li {
+      margin-bottom: 10px;
+    }
+
 .main-content {
   margin-left: 120px;
   padding: 0; /* Removed padding */
@@ -202,3 +222,37 @@ html, body {
     width: 100%;
     height: auto;
   }
+  
+  .video-scroll-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.video-scroll-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 10px;
+  width: 100%;
+}
+
+.scroll-video {
+  flex: 0 0 auto;
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.scroll-btn {
+  background: black;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 50%;
+}
+  
