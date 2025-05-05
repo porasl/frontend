@@ -1,0 +1,144 @@
+html, body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#app-container {
+  display: flex;
+  height: 100%;
+  margin-top: 56px;
+}
+
+.leftbar {
+  width: fit-content;
+  padding: 0.5rem;
+  background-color: #f5f5f5;
+  border-right: 1px solid #ddd;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+  position: fixed;
+  top: 56px;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.main-content {
+  margin-left: 200px;
+  padding: 1rem;
+  height: calc(100% - 56px);
+  overflow-y: auto;
+  width: calc(100% - 200px);
+}
+
+.tabs.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  background-color: white !important;
+  color: #007bff;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 6px 12px;
+}
+
+.tabs.navbar li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tabs.navbar a {
+  color: #007bff !important;
+  text-decoration: none;
+  padding: 6px 12px;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+.tabs.navbar a:hover,
+.tabs.navbar a.active {
+  background-color: #e6f0ff;
+  color: #0056b3 !important;
+}
+
+.tabs.navbar .logo {
+  height: 36px;
+  margin-right: 6px;
+}
+
+.top-link {
+  font-weight: 500;
+  color: #007bff;
+  font-size: 15px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.top-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.rail-video {
+  width: 140px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.rail-video:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 576px) {
+  .tabs.navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tabs.navbar .logo {
+    align-self: flex-end;
+    margin-top: 10px;
+  }
+
+  .leftbar {
+    display: none;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+#railVideosSection {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-bottom: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #007bff #f1f1f1;
+}
+
+#railVideosSection::-webkit-scrollbar {
+  height: 8px;
+}
+
+#railVideosSection::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+  border-radius: 4px;
+}
+
+.rail-video {
+  height: 300px;
+  width: auto;
+}
