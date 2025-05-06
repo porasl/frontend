@@ -1134,3 +1134,9 @@ left: 60px; /*position where enlarged image should offset horizontally */
     overflow-y: auto;
 }
 
+#myContents-container {
+  display: block !important;
+  background-color: white;
+  min-height: 200px;
+  padding: 20px;
+}
