@@ -275,7 +275,7 @@
           </div>
 
           <!-- File Drop Zone -->
-          <div class="mb-3 border border-secondary rounded p-4 text-center" id="dropZone" style="background-color: #f8f9fa; height: 250px; position: relative;">
+          <div class="mb-3 border border-secondary rounded p-4 text-center position-relative" id="dropZone" style="background-color: #f8f9fa; height: 250px;">
             <p class="mb-2">Drop your file here or click to browse</p>
             <input type="file" id="fileInput" name="file" required style="opacity:0;position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer;">
             <p id="fileName" class="mt-2 text-muted"></p>
@@ -287,25 +287,11 @@
           <button type="submit" class="btn btn-primary">Upload</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
-        <div class="spinner-border text-primary d-none" role="status" id="uploadSpinner">
-          <span class="visually-hidden">Uploading...</span>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-          <!-- File Drop Zone -->
-          <div class="mb-3 border border-secondary rounded p-4 text-center" id="dropZone" style="background-color: #f8f9fa; height: 250px; position: relative;">
-            <p class="mb-2">Drop your file here or click to browse</p>
-            
-          <input type="file" id="fileInput" name="file" required style="opacity: 0; position: absolute; left: -9999px;">
-<button type="button" class="btn btn-outline-secondary" id="browseBtn">Browse</button>
-
-            <p id="fileName" class="mt-2 text-muted"></p>
-            <p class="text-muted mt-3">Max file size: 100 MB</p>
+        <div class="text-center p-3">
+          <div class="spinner-border text-primary d-none" role="status" id="uploadSpinner">
+            <span class="visually-hidden">Uploading...</span>
           </div>
+        </div>
         </div>
 
         <div class="modal-footer">
