@@ -525,6 +525,67 @@ document.addEventListener("DOMContentLoaded", function () {
   
 });
 
+    //UPLOAD
+    function sendThePost(){
+        accessType = $('#publicSwitch').val();
+        username = "${pageContext.request.userPrincipal.name}";
+        postText = $('#postTextArea').val();
+        postInfoId = $('#postInfoId').val();
+        
+        if($('#memorySwitch').is(':checked')){
+            memeoryDatepicker = document.getElementById("memeoryDatepickerId");
+            memoryDate = $(memeoryDatepicker).datepicker('getDate');
+            if((memoryDate != null) && (typeof  memoryDate != 'undefined' )){
+                memoryDate = memoryDate.getTime();
+            }
+        }else{
+            memoryDate = null;
+        }
+        eventSwitch = $('#eventSwitch').is(':checked');
+        eventDatepicker = document.getElementById("eventDatepickerId");
+        eventDate = $(eventDatepicker).datepicker('getDate');
+        if($('#eventSwitch').is(':checked')){
+            if((eventDate != null) && (typeof  eventDate != 'undefined' )){
+                eventDate = eventDate.getTime();
+            }
+        }else{
+            eventDate = null;
+        }
+        
+        isPublic = $('#publicSwitch').is(':checked');
+        locale = "en";
+        $.ajax({
+                type : "POST",
+                headers : {
+                'Accept' : 'application/json',
+                'Content-Type' : 'application/json'
+                        },
+                        //async: false,
+                url : serverUrl+ "${contextPath}/post?${_csrf.parameterName}=${_csrf.token}",
+                data : {
+                        "username" : username,
+                        "description" : escape(postText),
+                        "memoryDate" : memoryDate,
+                        "eventDate" : eventDate,
+                        "accessType" : isPublic,
+                        "locale" : locale,
+                        "postInfoId": postInfoId
+                        },
+                success : function(data) {
+                    //indication that POST is done and in next POST reqquest don't send postid
+                    $("#postInfoId").val("");
+                    emptyPostArea();
+                    hidePostComponents();
+                    showAllSharedPostsWithContacts();
+                    // TODO: has to be removed????
+                    //loadItems();
+                    },
+                dataType : "json"
+                });
+   
+        $("#dropAreaPost").hide("slow");
+        $("#createPostField").show('slow');
+      }
 
 </script>
 </body>
