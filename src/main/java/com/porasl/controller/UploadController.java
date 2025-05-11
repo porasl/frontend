@@ -44,7 +44,7 @@ public class UploadController {
 			}
 
 			// Generate unique filename to prevent overwrites
-			String uniqueFileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+			String uniqueFileName = System.currentTimeMillis() + "_" + file.getOriginalFilename().replaceAll("\\s+", "");
 			Path filePath = uploadPath.resolve(uniqueFileName);
 
 			// Copy file to the target location
@@ -57,6 +57,10 @@ public class UploadController {
 			response.put("filename", uniqueFileName);
 			response.put("size", String.valueOf(file.getSize()));
 			response.put("path", filePath.toString());
+			
+			//send the file to be converted to HLS if it is MP4
+			log.info("Uploaded file $ is sent to be coverted : "+ filePath.toAbsolutePath());
+			
 
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {

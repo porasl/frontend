@@ -568,8 +568,8 @@ function showBazaar() {
 		  });
 		});
 
-    //Upload Modal
     
+//Upload Modal
 document.addEventListener("DOMContentLoaded", function () {
   const dropZone = document.getElementById("dropZone");
   const fileInput = document.getElementById("fileInput");
@@ -630,7 +630,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	    spinnerOverlay.show();
 
 	    $.ajax({
-	      url: 'http://localhost:8082/api/upload',
+	      url: '/api/upload',
 	      type: 'POST',
 	      data: formData,
 	      processData: false,
@@ -646,6 +646,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	        return xhr;
 	      },
 	      success: function (response) {
+	    	  // Reset form and close modal
+              $('#uploadForm')[0].reset();
+              $('#fileInput').val('');
+              $('#fileName').val('');
+              $('#uploadModal').modal('hide');
 	        spinnerOverlay.hide();
 	        $('#uploadModal').modal('hide');
 
