@@ -420,9 +420,6 @@ function showBazaar() {
 	  document.getElementById("iframe-container").classList.add("d-none");
 	  document.getElementById("app-container").classList.add("d-none");
 	}
-	
-	
-
 
 	document.addEventListener("DOMContentLoaded", function () {
 		  const scrollTrack = document.getElementById("videoScrollTrack");
@@ -494,99 +491,49 @@ document.addEventListener("DOMContentLoaded", function () {
     fileNameDisplay.textContent = file.name;
   }
 
-//Upload logic
   $(document).ready(function() {
-    $('#uploadForm').on('submit', function(e) {
-      e.preventDefault();
-      const spinner = $('#uploadSpinner');
-      spinner.show();
-      const formData = new FormData(this);
+	    $('#uploadForm').on('submit', function(e) {
+	        e.preventDefault();
+	        
+	        var formData = new FormData(this);
+	        
+	        $.ajax({
+	            url: 'http://localhost:8082/api/upload',
+	            type: 'POST',
+	            data: formData,
+	            processData: false,
+	            contentType: false,
+	            xhr: function() {
+	                var xhr = new window.XMLHttpRequest();
+	                xhr.upload.addEventListener('progress', function(e) {
+	                    if (e.lengthComputable) {
+	                        var percent = Math.round((e.loaded / e.total) * 100);
+	                        // Update progress if you have a progress bar
+	                        console.log(percent + '%');
+	                    }
+	                });
+	                return xhr;
+	            },
+	            success: function(response) {
+	                console.log('Upload successful:', response);
+	                alert('File uploaded successfully!');
+	            },
+	            error: function(xhr, status, error) {
+	                console.error('Upload failed:', error);
+	                console.error('Status:', status);
+	                console.error('Response:', xhr.responseText);
+	                alert('Upload failed: ' + error);
+	            }
+	        });
+	    });
+	});
 
-      $.ajax({
-        url: '/upload', // Your upload endpoint
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-          spinner.hide();
-          $('#uploadModal').modal('hide');
-          alert('Upload successful! Your file will be processed shortly.');
-        },
-        error: function(xhr) {
-          spinner.hide();
-          alert('Upload failed. Please try again.');
-        }
-      });
-    });
-  });
   
   
   
 });
 
-    //UPLOAD 
-    function sendThePost(){
-        accessType = $('#publicSwitch').val();
-        username = "${pageContext.request.userPrincipal.name}";
-        postText = $('#postTextArea').val();
-        postInfoId = $('#postInfoId').val();
-        
-        if($('#memorySwitch').is(':checked')){
-            memeoryDatepicker = document.getElementById("memeoryDatepickerId");
-            memoryDate = $(memeoryDatepicker).datepicker('getDate');
-            if((memoryDate != null) && (typeof  memoryDate != 'undefined' )){
-                memoryDate = memoryDate.getTime();
-            }
-        }else{
-            memoryDate = null;
-        }
-        eventSwitch = $('#eventSwitch').is(':checked');
-        eventDatepicker = document.getElementById("eventDatepickerId");
-        eventDate = $(eventDatepicker).datepicker('getDate');
-        if($('#eventSwitch').is(':checked')){
-            if((eventDate != null) && (typeof  eventDate != 'undefined' )){
-                eventDate = eventDate.getTime();
-            }
-        }else{
-            eventDate = null;
-        }
-        
-        isPublic = $('#publicSwitch').is(':checked');
-        locale = "en";
-        $.ajax({
-                type : "POST",
-                headers : {
-                'Accept' : 'application/json',
-                'Content-Type' : 'application/json'
-                        },
-                        //async: false,
-                url : serverUrl+ "${contextPath}/post?${_csrf.parameterName}=${_csrf.token}",
-                data : {
-                        "username" : username,
-                        "description" : escape(postText),
-                        "memoryDate" : memoryDate,
-                        "eventDate" : eventDate,
-                        "accessType" : isPublic,
-                        "locale" : locale,
-                        "postInfoId": postInfoId
-                        },
-                success : function(data) {
-                    //indication that POST is done and in next POST reqquest don't send postid
-                    $("#postInfoId").val("");
-                    emptyPostArea();
-                    hidePostComponents();
-                    showAllSharedPostsWithContacts();
-                    // TODO: has to be removed????
-                    //loadItems();
-                    },
-                dataType : "json"
-                });
    
-        $("#dropAreaPost").hide("slow");
-        $("#createPostField").show('slow');
-      }
-
 </script>
 </body>
 </html>

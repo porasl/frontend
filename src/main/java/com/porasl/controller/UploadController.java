@@ -1,46 +1,63 @@
 package com.porasl.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.porasl.frontend.util.MultipartInputStreamFileResource;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api")
 public class UploadController {
 
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadFile(@RequestPart MultipartFile file) {
-        // Forward to ContentService
-        String uploadUrl = "http://localhost:8082/upload";
-        RestTemplate restTemplate = new RestTemplate();
-
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-			body.add("file", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block 
-			e.printStackTrace();
-		}
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("Please select a file to upload");
+            }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            log.info("Received file: {} (size: {} bytes)", file.getOriginalFilename(), file.getSize());
 
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(uploadUrl, requestEntity, String.class);
+            // Process your file here
+            // For testing, just return success
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "File uploaded successfully");
+            response.put("filename", file.getOriginalFilename());
+            response.put("size", String.valueOf(file.getSize()));
 
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error uploading file", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to upload file: " + e.getMessage());
+        }
     }
 }
