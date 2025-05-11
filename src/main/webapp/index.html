@@ -650,9 +650,9 @@ document.addEventListener("DOMContentLoaded", function () {
               $('#uploadForm')[0].reset();
               $('#fileInput').val('');
               $('#fileName').val('');
+              $("dropZone").val('');
               $('#uploadModal').modal('hide');
-	        spinnerOverlay.hide();
-	        $('#uploadModal').modal('hide');
+              spinnerOverlay.hide();
 
 	        setTimeout(() => {
 	          alert('File uploaded successfully! It will be processed shortly.');
