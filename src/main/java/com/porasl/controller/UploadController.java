@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.porasl.frontend.kafka.KafkaMessagePublisher;
+
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,14 +26,19 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
 public class UploadController {
-	
 
-	@Value("${tmp.upload.dir}")  
+	@Value("${tmp.upload.dir}")
 	private String tmpUploadDir;
+
+	private final KafkaMessagePublisher publisher;
+
+	public UploadController(KafkaMessagePublisher publisher) {
+		this.publisher = publisher;
+	}
 
 	@PostMapping("/upload")
 	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
-		
+
 		try {
 			if (file.isEmpty()) {
 				return ResponseEntity.badRequest().body("Please select a file to upload");
@@ -44,7 +51,8 @@ public class UploadController {
 			}
 
 			// Generate unique filename to prevent overwrites
-			String uniqueFileName = System.currentTimeMillis() + "_" + file.getOriginalFilename().replaceAll("\\s+", "");
+			String uniqueFileName = System.currentTimeMillis() + "_"
+					+ file.getOriginalFilename().replaceAll("\\s+", "");
 			Path filePath = uploadPath.resolve(uniqueFileName);
 
 			// Copy file to the target location
@@ -57,10 +65,11 @@ public class UploadController {
 			response.put("filename", uniqueFileName);
 			response.put("size", String.valueOf(file.getSize()));
 			response.put("path", filePath.toString());
-			
-			//send the file to be converted to HLS if it is MP4
-			log.info("Uploaded file $ is sent to be coverted : "+ filePath.toAbsolutePath());
-			
+
+			// send the file to be converted to HLS if it is MP4
+			String message = "{\"ffmpegConvert\": \"" + filePath + "\"}";
+	        publisher.sendVideoMessage(message);
+			log.info("Uploaded file $ is sent to be coverted : " + filePath.toAbsolutePath());
 
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {

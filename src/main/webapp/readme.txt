@@ -60,6 +60,20 @@ INSERT INTO configinfo (configName, configValue) VALUES ("mail.user","info@inrik
 INSERT INTO configinfo (configName, configValue) VALUES ("mail.password","H2800amid!");
 
 
+Run docker-compose up -d from the same directory where docker-compose.yml is located.
+
+You can also create a /docker/ folder if you want to separate infra files, and run with docker-compose -f docker/docker-compose.yml up -d.
+
+
+Start Kafka (docker-compose up) //docker-compose up -d
+
+Start ContentServices (port 8083) to begin listening
+
+Start Frontend (port 8082) and POST a video file to /api/upload
+
+Check that the consumer picks up the message and starts encoding.
+
+
 
 
 
