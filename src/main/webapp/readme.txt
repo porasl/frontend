@@ -61,6 +61,7 @@ INSERT INTO configinfo (configName, configValue) VALUES ("mail.password","H2800a
 
 
 Run docker-compose up -d from the same directory where docker-compose.yml is located.
+- Install the Docker Desktop and start it
 
 You can also create a /docker/ folder if you want to separate infra files, and run with docker-compose -f docker/docker-compose.yml up -d.
 
