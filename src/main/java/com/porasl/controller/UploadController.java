@@ -67,9 +67,9 @@ public class UploadController {
 			response.put("path", filePath.toString());
 
 			// send the file to be converted to HLS if it is MP4
-			String message = "{\"ffmpegConvert\": \"" + filePath + "\"}";
+			String message = "{\"videoTranscode\": \"" + filePath + "\"}";
 	        publisher.sendVideoMessage(message);
-			log.info("Uploaded file $ is sent to be coverted : " + filePath.toAbsolutePath());
+			log.info("Uploaded file %s is sent to be coverted : " + filePath.toAbsolutePath());
 
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {

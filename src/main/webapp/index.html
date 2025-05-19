@@ -69,7 +69,8 @@
 					<li class="nav-item"><img src="resources/images/myContent.png"
 						alt="My Contents" onclick="showMyContent()" class="me-2"
 						style="height: 40px;"></li>
-					<li class="nav-item"><img src="resources/images/add.png"
+					<li class="nav-item">
+					<img src="resources/images/add.png"
 						alt="Add" class="me-2" style="height: 40px; cursor: pointer;"
 						data-bs-toggle="modal" data-bs-target="#uploadModal"></li>
 					<li class="nav-item"><a href="#" class="top-link"
@@ -128,6 +129,8 @@
 
 	<div id="app-container">
 		<div class="main-content">
+		
+         <video id="test" controls width="640" height="360"> </video>
 
 			<div id="railVideosSection">
 				<div class="video-scroll-wrapper">
@@ -167,6 +170,18 @@
 
 			<!-- Video Section -->
 			<div class="row g-4">
+			<div class="col-12 col-md-6 col-xl-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="card-title">Featured User Channel</h6>
+                            <video src="http://localhost:3000/videos/robin.mp4" controls
+                                class="w-100" style="max-height: 300px;"></video>
+                        </div>
+                    </div>
+                </div>
+			
+			
+			
 				<div class="col-12 col-md-6 col-xl-4">
 					<div class="card h-100">
 						<div class="card-body">
@@ -305,122 +320,73 @@
 		</div>
 
 		<!-- Upload Modal -->
-		<div class="modal fade" id="uploadModal" tabindex="-1">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<form id="uploadForm" enctype="multipart/form-data">
-						<div class="modal-header">
-							<h5 class="modal-title">Upload Content</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-						</div>
-						<div class="modal-body">
-							<!-- Title -->
-							<div class="mb-3">
-								<label for="title" class="form-label">Title</label> <input
-									type="text" class="form-control" id="title" name="title"
-									required>
-							</div>
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content rounded">
+      <div class="modal-header justify-content-between">
+        <h5 class="modal-title" id="uploadModalLabel">Create a Post</h5>
+        <button type="button" class="close" onclick="$('#uploadModal').modal('hide')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <!-- Left Column: Options -->
+            <div class="col-md-2">
+              <div id='publicPost'>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="memorySwitch" onclick="displayMemeory(this.id)">
+                  <label class="form-check-label" for="memorySwitch">Memory</label>
+                </div>
+                <div id="memeoryDateTd" style="display: none">
+                  <input type="text" id="memeoryDatepickerId" class="form-control form-control-sm">
+                </div>
 
-							<!-- Description -->
-							<div class="mb-3">
-								<label for="description" class="form-label">Description</label>
-								<textarea class="form-control" id="description"
-									name="description" rows="2"></textarea>
-							</div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="eventSwitch" onclick="displayEvent(this.id)">
+                  <label class="form-check-label" for="eventSwitch">Event</label>
+                </div>
+                <div id="eventDateTd" style="display: none">
+                  <input type="text" id="eventDatepickerId" class="form-control form-control-sm">
+                </div>
 
-							<!-- Categories -->
-							<div class="mb-3">
-								<label class="form-label d-block mb-1">Categories</label>
-								<div class="d-flex flex-wrap gap-3" id="categoryGroup">
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="event" id="catEvent"><label
-											class="form-check-label" for="catEvent">Event</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="memory" id="catMemory"><label
-											class="form-check-label" for="catMemory">Memory</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="status" id="catStatus" checked><label
-											class="form-check-label" for="catStatus">Status</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="news" id="catNews"><label
-											class="form-check-label" for="catNews">News</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="priority" id="catPriority"><label
-											class="form-check-label" for="catPriority">Priority</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="sport" id="catSport"><label
-											class="form-check-label" for="catSport">Sport</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="game" id="catGame"><label
-											class="form-check-label" for="catGame">Game</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="food" id="catFood"><label
-											class="form-check-label" for="catFood">Food</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="women" id="catWomen"><label
-											class="form-check-label" for="catWomen">Women</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="men" id="catMen"><label
-											class="form-check-label" for="catMen">Men</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											name="category" value="kids" id="catKids"><label
-											class="form-check-label" for="catKids">Kids</label>
-									</div>
-								</div>
-							</div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="publicSwitch" checked>
+                  <label class="form-check-label" for="publicSwitch">Public</label>
+                </div>
+              </div>
+            </div>
 
-							<!-- File Drop Zone -->
-							<div
-								class="mb-3 border border-secondary rounded p-4 text-center position-relative"
-								id="dropZone" style="background-color: #f8f9fa; height: 250px;">
-								<p class="mb-2">Drop your file here or click to browse</p>
-								<input type="file" id="fileInput" name="file" required
-									style="opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;">
-								<button type="button"
-									class="btn btn-outline-secondary position-absolute top-50 start-50 translate-middle"
-									onclick="document.getElementById('fileInput').click();">Browse</button>
-								<p id="fileName" class="mt-2 text-muted"></p>
-								<p class="text-muted mt-3">Max file size: 100 MB</p>
-							</div>
-						</div>
+            <!-- Right Column: Upload + Display + Buttons -->
+            <div class="col-md-10">
+              <div id="dropZone" class="border rounded p-3 mb-3 text-center" style="min-height: 200px;">
+                <p>Drag & Drop files here</p>
+                <form class="my-form">
+                  <input type="file" id="fileElem" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt" style="display:none" onchange="handleFilesPost(this.files)">
+                  <label for="fileElem" class="btn btn-outline-dark">Browse</label>
+                </form>
+              </div>
 
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary">Upload</button>
-							<button type="button" class="btn btn-secondary"
-								data-bs-dismiss="modal">Cancel</button>
-						</div>
-						<div class="text-center p-3">
-							<div class="spinner-border text-primary d-none" role="status"
-								id="uploadSpinner">
-								<span class="visually-hidden">Uploading...</span>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
+              <div id="imageAttach" class="mb-2">Area where uploaded images will be displayed</div>
+              <div id="audioAttach" class="mb-2">Area where uploaded MP3 files will be displayed</div>
+              <div id="otherAttach" class="mb-2">Area where uploaded docs, PDF and other formats can be displayed</div>
 
+              <div class="d-flex justify-content-end mt-4">
+                <button type="button" class="btn btn-outline-secondary mr-2" onclick="$('#uploadModal').modal('hide')">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="sendThePost()">Post</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+		
 
 
 		<!-- JavaScript -->
@@ -605,7 +571,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (file) handleFileSelect(file);
   });
 
-  function handleFileSelect(file) {
+  function handleFileSelect(file) {debugger;
     const maxBytes = MAX_SIZE_MB * 1024 * 1024;
     if (file.size > maxBytes) {
       alert("File exceeds the 100MB size limit.");
@@ -618,60 +584,125 @@ document.addEventListener("DOMContentLoaded", function () {
     fileInput.files = dt.files;
     fileNameDisplay.textContent = file.name;
   }
+  
+  
 
   $(document).ready(function () {
-	  $('#uploadForm').on('submit', function (e) {
-	    e.preventDefault();
-
-	    var formData = new FormData(this);
-	    var spinnerOverlay = $('#uploadSpinnerOverlay');
-
-	    // Show centered spinner overlay
-	    spinnerOverlay.show();
-
-	    $.ajax({
-	      url: '/api/upload',
-	      type: 'POST',
-	      data: formData,
-	      processData: false,
-	      contentType: false,
-	      xhr: function () {
-	        var xhr = new window.XMLHttpRequest();
-	        xhr.upload.addEventListener('progress', function (e) {
-	          if (e.lengthComputable) {
-	            var percent = Math.round((e.loaded / e.total) * 100);
-	            console.log(percent + '%');
-	          }
-	        });
-	        return xhr;
-	      },
-	      success: function (response) {
-	    	  // Reset form and close modal
-              $('#uploadForm')[0].reset();
-              $('#fileInput').val('');
-              $('#fileName').val('');
-              $("dropZone").val('');
-              $('#uploadModal').modal('hide');
-              spinnerOverlay.hide();
-
-	        setTimeout(() => {
-	          alert('File uploaded successfully! It will be processed shortly.');
-	        }, 500); // Slight delay after modal closes
-	      },
-	      error: function (xhr, status, error) {
-	        spinnerOverlay.hide();
-	        alert('Upload failed: ' + error);
-	      }
-	    });
-	  });
+	  
+	 
+  var videoDiv = document.getElementById('test');
+  var hls = new Hls({
+  debug: false    
+  });
+  hls.loadSource('http://localhost:3000/videos/1747552911568_test2/stream.m3u8');
+  hls.attachMedia(videoDiv);
+  
+  hls.on(Hls.Events.MEDIA_ATTACHED, function() {
+  videoDiv.muted = true;
+  videoDiv.autoplay='autoplay';
+  videoDiv.loop='loop';
+  videoDiv.muted='muted';
+  videoDiv.play();
+	}); 
+	         
+	        
+	    
 	});
-
-  
-  
-  
 });
 
-   
 </script>
+
+<!-- Add this hidden field somewhere outside or inside modal -->
+<input type="hidden" id="postid" name="postid" />
+
+<script>
+  const dropZone = document.getElementById("dropZone");
+  const fileInput = document.getElementById("fileElem");
+  const postIdField = document.getElementById("postid");
+
+  // Prevent default drag behaviors
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, e => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+  });
+
+  // Highlight on drag
+  dropZone.addEventListener("dragover", () => {
+    dropZone.classList.add("bg-light");
+  });
+
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("bg-light");
+  });
+
+  // Handle drop
+  dropZone.addEventListener("drop", e => {
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFilesPost(files); // Optional: display file info
+      uploadFile(files[0]);
+    }
+  });
+
+  // Handle file upload
+  function uploadFile(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch("http://localhost:8082/api/upload", {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.postId) {
+        postIdField.value = data.postId;
+        console.log("✅ Uploaded. Post ID:", data.postId);
+        // Optional: insert preview to image/audio/otherAttach
+        previewFile(file);
+      } else {
+        alert("Upload succeeded, but no post ID returned.");
+      }
+    })
+    .catch(err => {
+      console.error("Upload error:", err);
+      alert("File upload failed.");
+    });
+  }
+
+  // Display preview
+  function previewFile(file) {
+    const type = file.type;
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      let html = "";
+      if (type.startsWith("image/")) {
+        html = `<img src="${e.target.result}" class="img-thumbnail mr-2" style="max-height:100px;">`;
+        $("#imageAttach").append(html);
+      } else if (type.startsWith("audio/")) {
+        html = `<audio controls src="${e.target.result}" class="mr-2"></audio>`;
+        $("#audioAttach").append(html);
+      } else {
+        html = `<p><i class="fa fa-file mr-1"></i> ${file.name}</p>`;
+        $("#otherAttach").append(html);
+      }
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  // Optional: Support manual file selection
+  function handleFilesPost(files) {
+    if (files.length > 0) {
+      uploadFile(files[0]); // Trigger upload manually
+    }
+  }
+</script>
+
+
+
 </body>
 </html>

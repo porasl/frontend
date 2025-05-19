@@ -1,0 +1,67 @@
+worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+    server {
+    listen 3000;
+
+    ########################################################
+    # Serve static HLS video
+    ########################################################
+    location /videos/ {
+        root /Users/hamidporasl/webdata;  # <-- adjust this to match full path
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+        add_header 'Access-Control-Allow-Headers' '*';
+    }
+
+    ########################################################
+    # Serve static images
+    ########################################################
+    location /images/ {
+        root /Users/hamidporasl/webdata;  # Serve from /Users/hamidporasl/webdata/images/
+        add_header 'Access-Control-Allow-Origin' '*';
+    }
+
+    ########################################################
+    # Serve static audio files
+    ########################################################
+    location /audios/ {
+        root /Users/hamidporasl/webdata;  # Serve from /Users/hamidporasl/webdata/audios/
+        add_header 'Access-Control-Allow-Origin' '*';
+    }
+
+    ########################################################
+    # Proxy API to Spring Boot (port 8082)
+    ########################################################
+    location /api/ {
+        proxy_pass http://localhost:8082;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    ########################################################
+    # Serve React/Vue frontend (SPA)
+    ########################################################
+    location / {
+        root /Users/hamidporasl/frontend/dist;  # Adjust to match your React/Vue build directory
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+}
+
+
+    include servers/*;
+}

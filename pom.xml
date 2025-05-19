@@ -66,6 +66,12 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.5</version>  <!-- Updated version -->
         </dependency>
+        <dependency>
+            <groupId>net.bramp.ffmpeg</groupId>
+            <artifactId>ffmpeg</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+
 
         <!-- JSON Processing -->
         <dependency>
