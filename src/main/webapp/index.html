@@ -365,6 +365,7 @@
                 <p>Drag & Drop files here</p>
                 <form class="my-form">
                   <input type="file" id="fileElem" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt" style="display:none" onchange="handleFilesPost(this.files)">
+                  <div id="fileNameDisplay"></div>
                   <label for="fileElem" class="btn btn-outline-dark">Browse</label>
                 </form>
               </div>
@@ -542,50 +543,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const fileNameDisplay = document.getElementById("fileName");
   const uploadForm = document.getElementById("uploadForm");
 
-  const MAX_SIZE_MB = 100;
-  
-  //listeners for the upload checkBoxes
-  const categoryGroup = document.getElementById("categoryGroup");
-  const checkboxes = categoryGroup.querySelectorAll('input[type="checkbox"]');
-
-
   // Drag-and-drop handlers
   dropZone.addEventListener("dragover", (e) => {
     e.preventDefault();
     dropZone.classList.add("bg-light");
-  });
-
-  dropZone.addEventListener("dragleave", () => {
-    dropZone.classList.remove("bg-light");
-  });
-
-  dropZone.addEventListener("drop", (e) => {
-    e.preventDefault();
-    dropZone.classList.remove("bg-light");
-    const file = e.dataTransfer.files[0];
-    if (file) handleFileSelect(file);
-  });
-
-  fileInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file) handleFileSelect(file);
-  });
-
-  function handleFileSelect(file) {debugger;
-    const maxBytes = MAX_SIZE_MB * 1024 * 1024;
-    if (file.size > maxBytes) {
-      alert("File exceeds the 100MB size limit.");
-      fileInput.value = "";
-      fileNameDisplay.textContent = "";
-      return;
-    }
-    const dt = new DataTransfer();
-    dt.items.add(file);
-    fileInput.files = dt.files;
-    fileNameDisplay.textContent = file.name;
-  }
-  
-  
+  }); 
 
   $(document).ready(function () {
 	  
@@ -619,6 +581,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const dropZone = document.getElementById("dropZone");
   const fileInput = document.getElementById("fileElem");
   const postIdField = document.getElementById("postid");
+  
+  const MAX_SIZE_MB = 500;
 
   // Prevent default drag behaviors
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -633,6 +597,35 @@ document.addEventListener("DOMContentLoaded", function () {
     dropZone.classList.add("bg-light");
   });
 
+
+  dropZone.addEventListener("drop", (e) => {
+	    e.preventDefault();
+	    dropZone.classList.remove("bg-light");
+	    const file = e.dataTransfer.files[0];
+	    if (file) handleFileSelect(file);
+	  });
+
+	  fileInput.addEventListener("change", (e) => {
+	    const file = e.target.files[0];
+	    if (file) handleFileSelect(file);
+	  });
+
+	  function handleFileSelect(file) {debugger;
+	    const maxBytes = MAX_SIZE_MB * 1024 * 1024;
+	    //var dropZone = "";
+	    
+	    if (file.size > maxBytes) {
+	      alert("File exceeds the 100MB size limit.");
+	      fileInput.value = "";
+	      fileNameDisplay.textContent = "";
+	      return;
+	    }
+	    const dt = new DataTransfer();
+	    dt.items.add(file);
+	    fileInput.files = dt.files;
+	    fileNameDisplay.textContent = file.name;
+	  }
+  
   dropZone.addEventListener("dragleave", () => {
     dropZone.classList.remove("bg-light");
   });
