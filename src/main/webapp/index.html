@@ -297,7 +297,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">Activate Account</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
 						<form id="activateAccountForm">
@@ -369,7 +369,8 @@
                   <label for="fileElem" class="btn btn-outline-dark">Browse</label>
                 </form>
               </div>
-
+             
+              <div id="videoAttach" class="mb-2">---Area where uploaded images will be displayed</div>
               <div id="imageAttach" class="mb-2">Area where uploaded images will be displayed</div>
               <div id="audioAttach" class="mb-2">Area where uploaded MP3 files will be displayed</div>
               <div id="otherAttach" class="mb-2">Area where uploaded docs, PDF and other formats can be displayed</div>
@@ -650,11 +651,13 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then(res => res.json())
     .then(data => {
-      if (data.postId) {
-        postIdField.value = data.postId;
-        console.log("✅ Uploaded. Post ID:", data.postId);
-        // Optional: insert preview to image/audio/otherAttach
-        previewFile(file);
+      if (data.filename) {
+    	    dirname = data.filename.split(".")[0];
+        //costruct the videopath and render it with 10s delay 
+        videopath = "http://localhost:3000/videos/tmp/"+ data.filename;
+
+        console.log("✅ Uploaded. videopath:",videopath);
+        previewFile(file,videopath );
       } else {
         alert("Upload succeeded, but no post ID returned.");
       }
@@ -666,13 +669,17 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Display preview
-  function previewFile(file) {
+  function previewFile(file, videopath) {
     const type = file.type;
     const reader = new FileReader();
 
     reader.onload = function (e) {
       let html = "";
-      if (type.startsWith("image/")) {
+      if (type.startsWith("video/mp4")) {
+          html = `<video src=`+ videopath + ` controls width=300 height=200>`;
+          $("#videoAttach").append(html);
+        } 
+      else if (type.startsWith("image/")) {
         html = `<img src="${e.target.result}" class="img-thumbnail mr-2" style="max-height:100px;">`;
         $("#imageAttach").append(html);
       } else if (type.startsWith("audio/")) {
@@ -694,8 +701,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 </script>
-
-
+<video id="previewVideo" width="480" height="270" controls style="display: none;">
+  <source id="videoSource" src="" type="application/vnd.apple.mpegurl">
+  Your browser does not support the video tag.
+</video>
+<div id="videoMessage" class="mt-2 text-danger" style="display: none;"></div>
 
 </body>
 </html>

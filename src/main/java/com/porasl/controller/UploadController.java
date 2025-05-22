@@ -65,6 +65,7 @@ public class UploadController {
 			response.put("filename", uniqueFileName);
 			response.put("size", String.valueOf(file.getSize()));
 			response.put("path", filePath.toString());
+			
 
 			// send the file to be converted to HLS if it is MP4
 			String message = "{\"videoTranscode\": \"" + filePath + "\"}";

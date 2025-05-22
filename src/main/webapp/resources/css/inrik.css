@@ -248,4 +248,34 @@ html, body {
   font-size: 18px;
   border-radius: 50%;
 }
+
+.modal-content {
+  background-color: #fffffe;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+/* Space between Cancel and Post buttons */
+.d-flex.justify-content-end button {
+  margin-left: 0.5rem;
+}
+
+/* Optional: improve spacing of close button */
+.modal-header .close {
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+}
   
+#dropZone {
+  background-color: #ffffff; /* White background */
+  border: 2px dashed #6c757d; /* Optional: keep existing dashed border */
+  border-radius: 0.5rem;
+  padding: 1rem;
+  min-height: 200px;
+  text-align: center;
+}
+
+#dropZone:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
