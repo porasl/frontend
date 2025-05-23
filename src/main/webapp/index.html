@@ -476,6 +476,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("refresh_token", data.refresh_token);
         localStorage.setItem("userName", email);
+        localStoreage.setItem("userId", email);
         updateUI();
         window.location.href = "/dashboard";
       })
@@ -642,31 +643,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Handle file upload
   function uploadFile(file) {
-    const formData = new FormData();
-    formData.append("file", file);
+  const formData = new FormData();
+  formData.append("file", file);
 
-    fetch("http://localhost:8082/api/upload", {
-      method: "POST",
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.filename) {
-    	    dirname = data.filename.split(".")[0];
-        //costruct the videopath and render it with 10s delay 
-        videopath = "http://localhost:3000/videos/tmp/"+ data.filename;
-
-        console.log("✅ Uploaded. videopath:",videopath);
-        previewFile(file,videopath );
-      } else {
-        alert("Upload succeeded, but no post ID returned.");
-      }
-    })
-    .catch(err => {
-      console.error("Upload error:", err);
-      alert("File upload failed.");
-    });
+  // NEW: attach userId from local storage
+  const userId = localStorage.getItem("userId");
+  if (userId) {
+    formData.append("userId", userId);
   }
+
+  fetch("http://localhost:8082/api/upload", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.filename) {
+      dirname = data.filename.split(".")[0];
+      videopath = "http://localhost:3000/videos/tmp/" + data.filename;
+      console.log("✅ Uploaded. videopath:", videopath);
+      previewFile(file, videopath);
+    } else {
+      alert("Upload succeeded, but no post ID returned.");
+    }
+  })
+  .catch(err => {
+    console.error("Upload error:", err);
+    alert("File upload failed.");
+  });
+}
 
   // Display preview
   function previewFile(file, videopath) {
