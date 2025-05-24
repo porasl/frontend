@@ -614,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	    if (file) handleFileSelect(file);
 	  });
 
-	  function handleFileSelect(file) {debugger;
+	  function handleFileSelect(file) {
 	    const maxBytes = MAX_SIZE_MB * 1024 * 1024;
 	    //var dropZone = "";
 	    
@@ -645,15 +645,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Handle file upload
   function uploadFile(file) {
-  const formData = new FormData();
-  formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
   // NEW: attach userId from local storage
-  const userId = localStorage.getItem("userId");
-  if (userId) {
-    formData.append("userId", userId);
-    localservice.setItem();
-  }
+    const userId = localStorage.getItem("userId");
+    if (userId) {debugger;
+      formData.append("userId", userId);
+    }
 
   fetch("http://localhost:8082/api/upload", {
     method: "POST",
@@ -661,9 +660,8 @@ document.addEventListener("DOMContentLoaded", function () {
   })
   .then(res => res.json())
   .then(data => { debugger;
-      localStorage.setItem("userName", email);
-      localStoreage.setItem("userId", email);
-      localStoreage.setItem("postId", data.postId);
+  localStorage.setItem("userName", data.email);
+  localStorage.setItem("postId", data.postId);
     if (data.filename) {
       dirname = data.filename.split(".")[0];
       videopath = "http://localhost:3000/videos/tmp/" + data.filename;

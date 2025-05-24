@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.porasl.contentservices.domain.Attachment;
+import com.porasl.contentservices.repository.AttachRepository;
 import com.porasl.frontend.kafka.KafkaMessagePublisher;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +34,9 @@ public class UploadController {
 	private String tmpUploadDir;
 
 	private final KafkaMessagePublisher publisher;
+	
+	@Autowired
+	private AttachRepository attachRepo;
 
 	public UploadController(KafkaMessagePublisher publisher) {
 		this.publisher = publisher;
@@ -66,7 +72,37 @@ public class UploadController {
 			response.put("size", String.valueOf(file.getSize()));
 			response.put("path", filePath.toString());
 			
-
+			Attachment attachment = new Attachment();
+			attachment.setCreatedate(null);
+			// attachment.setCreatedby(userId);
+			attachment.setFilepath(uniqueFileName);
+			String typeString = uniqueFileName.split(".")[1].toUpperCase();
+			
+			String type = new String();
+			
+			switch(typeString) {
+			  case "MP4":
+			    type = "VIDEO";
+			    break;
+			  case "MP3":
+			    type = "AUDIO";
+			    break;
+			  case "JPEG":
+				type = "IMAGE";
+				break;
+			  case "JPG":
+				 type = "IMAGE";
+				 break;
+			  default:
+			    type = "Other";
+			}
+			
+			attachment.setType(type);
+			
+			attachRepo.save(attachment);
+			
+			
+			
 			// send the file to be converted to HLS if it is MP4
 			String message = "{\"videoTranscode\": \"" + filePath + "\"}";
 	        publisher.sendVideoMessage(message);

@@ -130,6 +130,11 @@
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
+        <dependency>
+        	<groupId>com.porasl</groupId>
+        	<artifactId>contentservices</artifactId>
+        	<version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
