@@ -652,6 +652,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const userId = localStorage.getItem("userId");
   if (userId) {
     formData.append("userId", userId);
+    localservice.setItem();
   }
 
   fetch("http://localhost:8082/api/upload", {
@@ -659,7 +660,10 @@ document.addEventListener("DOMContentLoaded", function () {
     body: formData
   })
   .then(res => res.json())
-  .then(data => {
+  .then(data => { debugger;
+      localStorage.setItem("userName", email);
+      localStoreage.setItem("userId", email);
+      localStoreage.setItem("postId", data.postId);
     if (data.filename) {
       dirname = data.filename.split(".")[0];
       videopath = "http://localhost:3000/videos/tmp/" + data.filename;
