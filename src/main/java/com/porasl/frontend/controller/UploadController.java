@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.porasl.frontend.domain.Attachment;
 import com.porasl.frontend.kafka.KafkaMessagePublisher;
-import com.porasl.frontend.repository.AttachRepository;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -35,15 +34,15 @@ public class UploadController {
 
 	private final KafkaMessagePublisher publisher;
 	
-	@Autowired
-	private AttachRepository attachRepo;
 
 	public UploadController(KafkaMessagePublisher publisher) {
 		this.publisher = publisher;
 	}
 
 	@PostMapping("/upload")
-	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file,
+            @RequestParam("userId") String userId,
+            @RequestParam("postId") String postId) {
 
 		try {
 			if (file.isEmpty()) {
@@ -72,40 +71,52 @@ public class UploadController {
 			response.put("size", String.valueOf(file.getSize()));
 			response.put("path", filePath.toString());
 			
-			Attachment attachment = new Attachment();
-			attachment.setCreatedate(null);
-			// attachment.setCreatedby(userId);
-			attachment.setFilepath(uniqueFileName);
 			String typeString = uniqueFileName.split(".")[1].toUpperCase();
 			
 			String type = new String();
+			JSONObject json = new JSONObject();
 			
 			switch(typeString) {
 			  case "MP4":
 			    type = "VIDEO";
+			    json.put("videopath", filePath.toString());
 			    break;
 			  case "MP3":
 			    type = "AUDIO";
+			    json.put("audiopath", filePath.toString());
 			    break;
 			  case "JPEG":
-				type = "IMAGE";
+				  type = "IMAGE";
+				  json.put("imagepath", filePath.toString());
 				break;
 			  case "JPG":
-				 type = "IMAGE";
+				  type = "IMAGE";
+				  json.put("imagepath", filePath.toString());
+				 break;
+			  case "GIF":
+				  type = "IMAGE";
+				  json.put("imagepath", filePath.toString());
 				 break;
 			  default:
 			    type = "Other";
 			}
 			
-			attachment.setType(type);
+			json.put("type", type);
+			json.put("userId", userId);
+			json.put("postId", postId);
 			
-			attachRepo.save(attachment);
+			String message = "";
+			if(type.equals("VIDEO")) {
+				message = "{\"videoTranscode\": \"" + filePath + "\"}";
+			}else if(type.equals("AUDIO")) {
+				message = "{\"audioTranscode\": \"" + filePath + "\"}";
+			}else if(type.equals("IMAGE")) {
+				message = "{\"imageTranscode\": \"" + filePath + "\"}";
+			}
 			
-			// send the file to be converted to HLS if it is MP4
-			String message = "{\"videoTranscode\": \"" + filePath + "\"}";
+	        publisher.sendAttachItemMessage(json.toString());
 	        publisher.sendVideoMessage(message);
 			log.info("Uploaded file %s is sent to be coverted : " + filePath.toAbsolutePath());
-
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			log.error("Error uploading file", e);

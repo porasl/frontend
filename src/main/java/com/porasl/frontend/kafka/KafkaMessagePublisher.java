@@ -15,5 +15,11 @@ public class KafkaMessagePublisher {
     public void sendVideoMessage(String videoJson) {
         kafkaTemplate.send("video-uploads", videoJson);
     }
+    
+    public void sendAttachItemMessage(String videoJson) {
+        kafkaTemplate.send("attach-uploads", videoJson);
+    }
+    
+    
 }
 
