@@ -1,4 +1,4 @@
-package com.porasl.controller;
+package com.porasl.frontend.controller;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.porasl.contentservices.domain.Attachment;
-import com.porasl.contentservices.repository.AttachRepository;
+import com.porasl.frontend.domain.Attachment;
 import com.porasl.frontend.kafka.KafkaMessagePublisher;
+import com.porasl.frontend.repository.AttachRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,8 +100,6 @@ public class UploadController {
 			attachment.setType(type);
 			
 			attachRepo.save(attachment);
-			
-			
 			
 			// send the file to be converted to HLS if it is MP4
 			String message = "{\"videoTranscode\": \"" + filePath + "\"}";

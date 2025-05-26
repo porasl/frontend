@@ -1,4 +1,4 @@
-package com.porasl.controller;
+package com.porasl.frontend.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

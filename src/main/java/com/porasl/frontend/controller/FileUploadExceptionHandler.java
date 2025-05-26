@@ -1,4 +1,4 @@
-package com.porasl.controller;
+package com.porasl.frontend.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

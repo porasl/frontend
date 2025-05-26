@@ -1,4 +1,4 @@
-package com.porasl.controller;
+package com.porasl.frontend.controller;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-@RestController
+@RestController("frontendController")
 @RequestMapping("/api")
 public class AuthenticationController {
 

@@ -100,7 +100,21 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
+        <dependency>
+            <groupId>com.porasl</groupId>
+            <artifactId>authservices</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+         <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <version>1.5.4</version>
+        </dependency>
         <!-- HTTP Client -->
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
@@ -131,9 +145,8 @@
             <artifactId>spring-kafka</artifactId>
         </dependency>
         <dependency>
-        	<groupId>com.porasl</groupId>
-        	<artifactId>contentservices</artifactId>
-        	<version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
     </dependencies>
 
