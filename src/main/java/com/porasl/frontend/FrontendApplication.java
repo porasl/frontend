@@ -18,7 +18,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     },
     scanBasePackages = {
     		"com.porasl.frontend",
-    		 "com.porasl.authservices",
     		  "com.porasl.frontend.controller",
     		  "com.porasl.frontend.repository", 
     		  "com.porasl.frontend.kafka"
@@ -32,8 +31,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 	    )
 	)
 
-@EnableJpaRepositories(basePackages = "com.porasl.frontend.repository")
-@EntityScan(basePackages = "com.porasl.authservices.user")
+//@EnableJpaRepositories(basePackages = "com.porasl.frontend.repository")
+//@EntityScan(basePackages = "com.porasl.authservices.user")
 
 public class FrontendApplication extends SpringBootServletInitializer {
 
