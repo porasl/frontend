@@ -71,7 +71,8 @@ public class UploadController {
 			response.put("size", String.valueOf(file.getSize()));
 			response.put("path", filePath.toString());
 			
-			String typeString = uniqueFileName.split(".")[1].toUpperCase();
+			String[] parts = uniqueFileName.split("\\.");
+			String typeString = parts.length > 1 ? parts[parts.length - 1].toUpperCase() : "";
 			
 			String type = new String();
 			JSONObject json = new JSONObject();
@@ -114,7 +115,8 @@ public class UploadController {
 				message = "{\"imageTranscode\": \"" + filePath + "\"}";
 			}
 			
-	        publisher.sendAttachItemMessage(json.toString());
+			String attachMessage = "{\"attachMessage\": \"" + json.toString() + "\"}";
+	        publisher.sendAttachItemMessage(attachMessage);
 	        publisher.sendVideoMessage(message);
 			log.info("Uploaded file %s is sent to be coverted : " + filePath.toAbsolutePath());
 			return ResponseEntity.ok(response);

@@ -472,7 +472,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         return response.json();
       })
-      .then(data => {debugger;
+      .then(data => {
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("refresh_token", data.refresh_token);
         localStorage.setItem("userName", email);
@@ -641,10 +641,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Handle file upload
-  function uploadFile(file) {
+  function uploadFile(file) {debugger
     const formData = new FormData();
     const userId = localStorage.getItem("userId");
-    const postId = localeStorage.getItem("postId");
+    const postId = localStorage.getItem("postId");
     formData.append("file", file);
     formData.append("userId", userId);
     formData.append("postId", postId);
