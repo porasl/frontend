@@ -472,12 +472,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         return response.json();
       })
-      .then(data => {
+      .then(data => {debugger;
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("refresh_token", data.refresh_token);
         localStorage.setItem("userName", email);
-        localStoreage.setItem("userId", email);
-        localStoreage.setItem("postId", data.postId);
+        localStorage.setItem("userId", email);
+        localStorage.setItem("postId", data.postId);
         
         updateUI();
         window.location.href = "/dashboard";
