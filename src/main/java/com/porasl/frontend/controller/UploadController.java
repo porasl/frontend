@@ -121,9 +121,6 @@ public class UploadController {
 			    transcode.put(transcodeKey, filePath.toString());
 			    publisher.sendVideoMessage(transcode.toString());
 			}
-
-			
-			publisher.sendVideoMessage(message);
 			log.info("Uploaded file %s is sent to be coverted : " + filePath.toAbsolutePath());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
