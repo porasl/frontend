@@ -75,49 +75,55 @@ public class UploadController {
 			String typeString = parts.length > 1 ? parts[parts.length - 1].toUpperCase() : "";
 			
 			String type = new String();
+
 			JSONObject json = new JSONObject();
-			
-			switch(typeString) {
-			  case "MP4":
-			    type = "VIDEO";
-			    json.put("videopath", filePath.toString());
-			    break;
-			  case "MP3":
-			    type = "AUDIO";
-			    json.put("audiopath", filePath.toString());
-			    break;
-			  case "JPEG":
-				  type = "IMAGE";
-				  json.put("imagepath", filePath.toString());
-				break;
-			  case "JPG":
-				  type = "IMAGE";
-				  json.put("imagepath", filePath.toString());
-				 break;
-			  case "GIF":
-				  type = "IMAGE";
-				  json.put("imagepath", filePath.toString());
-				 break;
-			  default:
-			    type = "Other";
+
+			switch (typeString) {
+			    case "MP4":
+			        type = "VIDEO";
+			        json.put("videopath", filePath.toString());
+			        break;
+			    case "MP3":
+			        type = "AUDIO";
+			        json.put("audiopath", filePath.toString());
+			        break;
+			    case "JPEG":
+			    case "JPG":
+			    case "GIF":
+			        type = "IMAGE";
+			        json.put("imagepath", filePath.toString());
+			        break;
+			    default:
+			        type = "Other";
 			}
-			
+
 			json.put("type", type);
 			json.put("userId", userId);
 			json.put("postId", postId);
-			
-			String message = "";
-			if(type.equals("VIDEO")) {
-				message = "{\"videoTranscode\": \"" + filePath + "\"}";
-			}else if(type.equals("AUDIO")) {
-				message = "{\"audioTranscode\": \"" + filePath + "\"}";
-			}else if(type.equals("IMAGE")) {
-				message = "{\"imageTranscode\": \"" + filePath + "\"}";
+
+			// Wrap the attachMessage properly using JSONObject to escape inner content
+			JSONObject wrapper = new JSONObject();
+			wrapper.put("attachMessage", json.toString()); // Inner JSON is a string here, escaped correctly
+
+			String attachMessage = wrapper.toString(); // Now valid JSON all the way
+			publisher.sendAttachItemMessage(attachMessage);
+
+			// Optionally send transcode message separately
+			String transcodeKey = switch (type) {
+			    case "VIDEO" -> "videoTranscode";
+			    case "AUDIO" -> "audioTranscode";
+			    case "IMAGE" -> "imageTranscode";
+			    default -> null;
+			};
+
+			if (transcodeKey != null) {
+			    JSONObject transcode = new JSONObject();
+			    transcode.put(transcodeKey, filePath.toString());
+			    publisher.sendVideoMessage(transcode.toString());
 			}
+
 			
-			String attachMessage = "{\"attachMessage\": \"" + json.toString() + "\"}";
-	        publisher.sendAttachItemMessage(attachMessage);
-	        publisher.sendVideoMessage(message);
+			publisher.sendVideoMessage(message);
 			log.info("Uploaded file %s is sent to be coverted : " + filePath.toAbsolutePath());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
