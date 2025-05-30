@@ -95,6 +95,7 @@ public class UploadController {
 			        break;
 			    default:
 			        type = "Other";
+			        json.put("filepath", filePath.toString());
 			}
 
 			json.put("type", type);
