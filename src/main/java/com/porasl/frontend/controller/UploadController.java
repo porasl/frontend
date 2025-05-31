@@ -42,7 +42,7 @@ public class UploadController {
 	@PostMapping("/upload")
 	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file,
             @RequestParam("userId") String userId,
-            @RequestParam("postId") String postId) {
+            @RequestParam("postCode") String postCode) {
 
 		try {
 			if (file.isEmpty()) {
@@ -100,7 +100,7 @@ public class UploadController {
 
 			json.put("type", type);
 			json.put("userId", userId);
-			json.put("postId", postId);
+			json.put("postCode", postCode);
 
 			// Wrap the attachMessage properly using JSONObject to escape inner content
 			JSONObject wrapper = new JSONObject();

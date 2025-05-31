@@ -644,10 +644,10 @@ document.addEventListener("DOMContentLoaded", function () {
   function uploadFile(file) {debugger
     const formData = new FormData();
     const userId = localStorage.getItem("userId");
-    const postId = localStorage.getItem("postId");
+    const postId = localStorage.getItem("postCode");
     formData.append("file", file);
     formData.append("userId", userId);
-    formData.append("postId", postId);
+    formData.append("postCode", postCode);
 
   fetch("http://localhost:8082/api/upload", {
     method: "POST",
@@ -656,14 +656,14 @@ document.addEventListener("DOMContentLoaded", function () {
   .then(res => res.json())
   .then(data => { debugger;
   localStorage.setItem("userName", data.email);
-  localStorage.setItem("postId", data.postId);
+  localStorage.setItem("postCode", data.postId);
     if (data.filename) {
       dirname = data.filename.split(".")[0];
       filepath = "http://localhost:3000/videos/tmp/" + data.filename;
       console.log("✅ Uploaded. filepath:", filepath);
       previewFile(file, filepath);
     } else {
-      alert("Upload succeeded, but no post ID returned.");
+      alert("Upload succeeded, but no post Code returned.");
     }
   })
   .catch(err => {
