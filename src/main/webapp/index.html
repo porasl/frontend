@@ -647,6 +647,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const postId = localStorage.getItem("postCode");
     formData.append("file", file);
     formData.append("userId", userId);
+    
+    if(typeof myVariable === 'undefined') postCode="";
+    
     formData.append("postCode", postCode);
 
   fetch("http://localhost:8082/api/upload", {

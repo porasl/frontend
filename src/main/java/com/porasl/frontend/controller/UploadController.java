@@ -123,6 +123,7 @@ public class UploadController {
 			    publisher.sendVideoMessage(transcode.toString());
 			}
 			log.info("Uploaded file %s is sent to be coverted : " + filePath.toAbsolutePath());
+			response.put("postCode", postCode);
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			log.error("Error uploading file", e);
