@@ -7,6 +7,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,9 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.porasl.frontend.kafka.KafkaMessagePublisher;
 
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -34,7 +33,6 @@ public class UploadController {
 
 	private final KafkaMessagePublisher publisher;
 	
-
 	public UploadController(KafkaMessagePublisher publisher) {
 		this.publisher = publisher;
 	}
@@ -42,7 +40,7 @@ public class UploadController {
 	@PostMapping("/upload")
 	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file,
             @RequestParam("userId") String userId,
-            @RequestParam("postCode") String postCode) {
+            @RequestParam("postId") String postId) {
 
 		try {
 			if (file.isEmpty()) {
@@ -100,7 +98,7 @@ public class UploadController {
 
 			json.put("type", type);
 			json.put("userId", userId);
-			json.put("postCode", postCode);
+			json.put("postCode", postId);
 
 			// Wrap the attachMessage properly using JSONObject to escape inner content
 			JSONObject wrapper = new JSONObject();
@@ -123,7 +121,10 @@ public class UploadController {
 			    publisher.sendVideoMessage(transcode.toString());
 			}
 			log.info("Uploaded file %s is sent to be coverted : " + filePath.toAbsolutePath());
-			response.put("postCode", postCode);
+			
+			// Check the postId in the Mongo DB. If doesn't exist create the Post in Mongo DB
+			
+			response.put("postCode", postId);
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			log.error("Error uploading file", e);
