@@ -51,8 +51,7 @@
 	   
 		<table> 
 			<td align='center'>   
-				<input id='emailAddressId' value="" size="40" class="form-control" placeholder="Email Address"> &nbsp; 
-					
+				<input id='emailAddressId' value="" size="40" class="form-control" placeholder="Email Address">     &nbsp; 	
 				<br>
 				<span onclick="resendActivationCode()" style=' border:1;
 				   border:2px solid #c0c0c0;background:#f5f5f5;padding:4px;position:relative'>
