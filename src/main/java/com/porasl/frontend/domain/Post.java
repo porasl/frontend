@@ -11,11 +11,11 @@ public class Post {
     private String title;
     private String content;
     private String author;
-    private String createdAt;
+    private Long createdAt;
 
     public Post() {}
 
-    public Post(String title, String content, String author, String createdAt) {
+    public Post(String title, String content, String author, Long createdAt) {
         this.title = title;
         this.content = content;
         this.author = author;
@@ -35,7 +35,7 @@ public class Post {
     public String getAuthor() { return author; }
     public void setAuthor(String author) { this.author = author; }
 
-    public String getCreatedAt() { return createdAt; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public Long getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Long createdAt) { this.createdAt = createdAt; }
 }
 

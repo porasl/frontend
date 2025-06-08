@@ -482,7 +482,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateUI();
         window.location.href = "/dashboard";
       })
-      .catch(error => {
+      .catch(error => {debugger;
         console.error("Login failed:", error);
         alert("Login failed. Please check your credentials.");
       });
@@ -644,13 +644,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function uploadFile(file) {debugger
     const formData = new FormData();
     const userId = localStorage.getItem("userId");
-    const postId = localStorage.getItem("postCode");
+    const postId = localStorage.getItem("postId");
     formData.append("file", file);
     formData.append("userId", userId);
     
     if(typeof myVariable === 'undefined') postCode="";
     
-    formData.append("postCode", postCode);
+    formData.append("postId", postId);
 
   fetch("http://localhost:8082/api/upload", {
     method: "POST",
@@ -658,8 +658,9 @@ document.addEventListener("DOMContentLoaded", function () {
   })
   .then(res => res.json())
   .then(data => { debugger;
-  localStorage.setItem("userName", data.email);
-  localStorage.setItem("postCode", data.postId);
+  localStorage.setItem("userId", data.email);
+  localStorage.setItem("email", data.email);
+  localStorage.setItem("postId", data.postId);
     if (data.filename) {
       dirname = data.filename.split(".")[0];
       filepath = "http://localhost:3000/videos/tmp/" + data.filename;

@@ -1,4 +1,4 @@
-package com.porasl.repositories;
+package com.porasl.frontend.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

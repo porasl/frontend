@@ -1,24 +1,18 @@
 package com.porasl.frontend.controller;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.*;
+import java.util.*;
 
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.porasl.frontend.domain.Post;
 import com.porasl.frontend.kafka.KafkaMessagePublisher;
+import com.porasl.frontend.repository.PostRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,108 +22,100 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api")
 public class UploadController {
 
-	@Value("${tmp.upload.dir}")
-	private String tmpUploadDir;
+    @Value("${tmp.upload.dir}")
+    private String tmpUploadDir;
 
-	private final KafkaMessagePublisher publisher;
-	
-	public UploadController(KafkaMessagePublisher publisher) {
-		this.publisher = publisher;
-	}
+    private final KafkaMessagePublisher publisher;
+    private final PostRepository postRepository;
 
-	@PostMapping("/upload")
-	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file,
+    @Autowired
+    public UploadController(KafkaMessagePublisher publisher, PostRepository postRepository) {
+        this.publisher = publisher;
+        this.postRepository = postRepository;
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFile(
+            @RequestParam("file") MultipartFile file,
             @RequestParam("userId") String userId,
             @RequestParam("postId") String postId) {
 
-		try {
-			if (file.isEmpty()) {
-				return ResponseEntity.badRequest().body("Please select a file to upload");
-			}
+        try {
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("Please select a file to upload");
+            }
 
-			// Create upload directory if it doesn't exist
-			Path uploadPath = Paths.get(tmpUploadDir);
-			if (!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
-			}
+            Path uploadPath = Paths.get(tmpUploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
 
-			// Generate unique filename to prevent overwrites
-			String uniqueFileName = System.currentTimeMillis() + "_"
-					+ file.getOriginalFilename().replaceAll("\\s+", "");
-			Path filePath = uploadPath.resolve(uniqueFileName);
+            String uniqueFileName = System.currentTimeMillis() + "_" + file.getOriginalFilename().replaceAll("\\s+", "");
+            Path filePath = uploadPath.resolve(uniqueFileName);
 
-			// Copy file to the target location
-			Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-			log.info("Stored file: {} (size: {} bytes)", uniqueFileName, file.getSize());
+            log.info("Stored file: {} (size: {} bytes)", uniqueFileName, file.getSize());
 
-			Map<String, String> response = new HashMap<>();
-			response.put("message", "File uploaded successfully");
-			response.put("filename", uniqueFileName);
-			response.put("size", String.valueOf(file.getSize()));
-			response.put("path", filePath.toString());
-			
-			String[] parts = uniqueFileName.split("\\.");
-			String typeString = parts.length > 1 ? parts[parts.length - 1].toUpperCase() : "";
-			
-			String type = new String();
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "File uploaded successfully");
+            response.put("filename", uniqueFileName);
+            response.put("size", String.valueOf(file.getSize()));
+            response.put("path", filePath.toString());
 
-			JSONObject json = new JSONObject();
+            String[] parts = uniqueFileName.split("\\.");
+            String typeString = parts.length > 1 ? parts[parts.length - 1].toUpperCase() : "";
+            String type;
 
-			switch (typeString) {
-			    case "MP4":
-			        type = "VIDEO";
-			        json.put("videopath", filePath.toString());
-			        break;
-			    case "MP3":
-			        type = "AUDIO";
-			        json.put("audiopath", filePath.toString());
-			        break;
-			    case "JPEG":
-			    case "JPG":
-			    case "GIF":
-			        type = "IMAGE";
-			        json.put("imagepath", filePath.toString());
-			        break;
-			    default:
-			        type = "Other";
-			        json.put("filepath", filePath.toString());
-			}
+            JSONObject json = new JSONObject();
 
-			json.put("type", type);
-			json.put("userId", userId);
-			json.put("postCode", postId);
+            switch (typeString) {
+                case "MP4" -> {
+                    type = "VIDEO";
+                    json.put("videopath", filePath.toString());
+                }
+                case "MP3" -> {
+                    type = "AUDIO";
+                    json.put("audiopath", filePath.toString());
+                }
+                case "JPEG", "JPG", "GIF" -> {
+                    type = "IMAGE";
+                    json.put("imagepath", filePath.toString());
+                }
+                default -> {
+                    type = "OTHER";
+                    json.put("filepath", filePath.toString());
+                }
+            }
 
-			// Wrap the attachMessage properly using JSONObject to escape inner content
-			JSONObject wrapper = new JSONObject();
-			wrapper.put("attachMessage", json.toString()); // Inner JSON is a string here, escaped correctly
+            json.put("type", type);
+            json.put("userId", userId);
 
-			String attachMessage = wrapper.toString(); // Now valid JSON all the way
-			publisher.sendAttachItemMessage(attachMessage);
+            JSONObject wrapper = new JSONObject();
+            wrapper.put("attachMessage", json.toString());
 
-			// Optionally send transcode message separately
-			String transcodeKey = switch (type) {
-			    case "VIDEO" -> "videoTranscode";
-			    case "AUDIO" -> "audioTranscode";
-			    case "IMAGE" -> "imageTranscode";
-			    default -> null;
-			};
+            String attachMessage = wrapper.toString();
+            publisher.sendAttachItemMessage(attachMessage);
 
-			if (transcodeKey != null) {
-			    JSONObject transcode = new JSONObject();
-			    transcode.put(transcodeKey, filePath.toString());
-			    publisher.sendVideoMessage(transcode.toString());
-			}
-			log.info("Uploaded file %s is sent to be coverted : " + filePath.toAbsolutePath());
-			
-			// Check the postId in the Mongo DB. If doesn't exist create the Post in Mongo DB
-			
-			response.put("postCode", postId);
-			return ResponseEntity.ok(response);
-		} catch (Exception e) {
-			log.error("Error uploading file", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to upload file: " + e.getMessage());
-		}
-	}
+            switch (type) {
+                case "VIDEO" -> publisher.sendVideoMessage("{\"videoTranscode\":\"" + filePath + "\"}");
+                case "AUDIO" -> publisher.sendVideoMessage("{\"audioTranscode\":\"" + filePath + "\"}");
+                case "IMAGE" -> publisher.sendVideoMessage("{\"imageTranscode\":\"" + filePath + "\"}");
+            }
+
+            log.info("Uploaded file {} is sent to be converted.", filePath.toAbsolutePath());
+
+            // Save post if not already existing (simplified logic)
+            Post post = new Post("Sample Title", "No comments yet", userId, System.currentTimeMillis());
+            postRepository.save(post);
+
+            response.put("postCode", postId);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error uploading file", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to upload file: " + e.getMessage());
+        }
+    }
 }
