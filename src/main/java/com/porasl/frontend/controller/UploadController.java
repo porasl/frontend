@@ -10,6 +10,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.porasl.frontend.domain.DocumentAttachment;
 import com.porasl.frontend.domain.Post;
 import com.porasl.frontend.kafka.KafkaMessagePublisher;
 import com.porasl.frontend.repository.PostRepository;
@@ -67,49 +68,84 @@ public class UploadController {
             String typeString = parts.length > 1 ? parts[parts.length - 1].toUpperCase() : "";
             String type;
 
-            JSONObject json = new JSONObject();
+            String fileUrl = filePath.toString();
 
+            // Try to find an existing post by postId
+            Optional<Post> optionalPost = postRepository.findById(postId);
+            Post post = optionalPost.orElseGet(() -> {
+                Post newPost = new Post();
+                newPost.setId(postId); // Use the given postId (or generate a new one if desired)
+                newPost.setTitle("Sample Title");
+                newPost.setDescription("Sample Description");
+                newPost.setContent("Sample Content");
+                newPost.setAuthor(userId);
+                newPost.setCreatedAt(System.currentTimeMillis());
+                newPost.setVideoUrls(new ArrayList<>());
+                newPost.setAudioUrls(new ArrayList<>());
+                newPost.setImageUrls(new ArrayList<>());
+                newPost.setDocuments(new ArrayList<>());
+                newPost.setComments(new ArrayList<>());
+                newPost.setEvent(false);
+                newPost.setMemory(false);
+                return newPost;
+            });
+
+            // Attach the uploaded file to the appropriate list
             switch (typeString) {
-                case "MP4" -> {
+                case "MP4":
                     type = "VIDEO";
-                    json.put("videopath", filePath.toString());
-                }
-                case "MP3" -> {
+                    post.getVideoUrls().add(fileUrl);
+                    break;
+                case "MP3":
                     type = "AUDIO";
-                    json.put("audiopath", filePath.toString());
-                }
-                case "JPEG", "JPG", "GIF" -> {
+                    post.getAudioUrls().add(fileUrl);
+                    break;
+                case "JPEG":
+                case "JPG":
+                case "PNG":
+                case "GIF":
                     type = "IMAGE";
-                    json.put("imagepath", filePath.toString());
-                }
-                default -> {
+                    post.getImageUrls().add(fileUrl);
+                    break;
+                case "PDF":
+                case "DOC":
+                case "DOCX":
+                case "XLS":
+                case "XLSX":
+                    type = "DOCUMENT";
+                    // If you have a DocumentAttachment class, use that:
+                    DocumentAttachment doc = new DocumentAttachment(uniqueFileName, fileUrl, typeString);
+                    post.getDocuments().add(doc);
+                    break;
+                default:
                     type = "OTHER";
-                    json.put("filepath", filePath.toString());
-                }
+                    // For unsupported file types, optionally handle here
+                    break;
             }
 
+            // Send message to Kafka (unchanged)
+            JSONObject json = new JSONObject();
             json.put("type", type);
             json.put("userId", userId);
+            json.put("filePath", fileUrl);
 
             JSONObject wrapper = new JSONObject();
             wrapper.put("attachMessage", json.toString());
-
             String attachMessage = wrapper.toString();
             publisher.sendAttachItemMessage(attachMessage);
 
             switch (type) {
-                case "VIDEO" -> publisher.sendVideoMessage("{\"videoTranscode\":\"" + filePath + "\"}");
-                case "AUDIO" -> publisher.sendVideoMessage("{\"audioTranscode\":\"" + filePath + "\"}");
-                case "IMAGE" -> publisher.sendVideoMessage("{\"imageTranscode\":\"" + filePath + "\"}");
+                case "VIDEO" -> publisher.sendVideoMessage("{\"videoTranscode\":\"" + fileUrl + "\"}");
+                case "AUDIO" -> publisher.sendVideoMessage("{\"audioTranscode\":\"" + fileUrl + "\"}");
+                case "IMAGE" -> publisher.sendVideoMessage("{\"imageTranscode\":\"" + fileUrl + "\"}");
             }
 
             log.info("Uploaded file {} is sent to be converted.", filePath.toAbsolutePath());
 
-            // Save post if not already existing (simplified logic)
-            Post post = new Post("Sample Title", "No comments yet", userId, System.currentTimeMillis());
-            postRepository.save(post);
+            // Save or update the post in MongoDB
+            Post savedPost = postRepository.save(post);
 
-            response.put("postCode", postId);
+            response.put("postId", savedPost.getId());
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
