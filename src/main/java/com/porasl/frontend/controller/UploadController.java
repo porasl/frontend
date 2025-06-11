@@ -70,11 +70,12 @@ public class UploadController {
 
             String fileUrl = filePath.toString();
 
+            if(postId.equals("undefined"))  postId="";
+            
             // Try to find an existing post by postId
             Optional<Post> optionalPost = postRepository.findById(postId);
             Post post = optionalPost.orElseGet(() -> {
                 Post newPost = new Post();
-                newPost.setId(postId); // Use the given postId (or generate a new one if desired)
                 newPost.setTitle("Sample Title");
                 newPost.setDescription("Sample Description");
                 newPost.setContent("Sample Content");
@@ -142,11 +143,10 @@ public class UploadController {
 
             log.info("Uploaded file {} is sent to be converted.", filePath.toAbsolutePath());
 
-            // Save or update the post in MongoDB
-            Post savedPost = postRepository.save(post);
-
-            response.put("postId", savedPost.getId());
-            return ResponseEntity.ok(response);
+            	post = postRepository.save(post);
+            
+            response.put("postId", post.getId());
+            return ResponseEntity.ok(post);
 
         } catch (Exception e) {
             log.error("Error uploading file", e);
