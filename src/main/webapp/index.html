@@ -661,6 +661,19 @@ document.addEventListener("DOMContentLoaded", function () {
   localStorage.setItem("userId", data.email);
   localStorage.setItem("email", data.email);
   localStorage.setItem("postId", data.postId);
+  localeStorage.setItem("audioUrls",data.audioUrls);
+  localeStorage.setItem("author",data.author);
+  localeStorage.setItem("comments",data.comments);
+  localeStorage.setItem("content",data.content);
+  localeStorage.setItem("createdAt",data.createdAt);
+  localeStorage.setItem("documentUrls",data.documentUrls);
+  localeStorage.setItem("event",data.event);
+  localeStorage.setItem("postId",data.id);
+  localeStorage.setItem("imageUrls",data.imageUrls);
+  localeStorage.setItem("memory",data.memory);
+  localeStorage.setItem("title",data.title);
+  localeStorage.setItem("title",data.title);
+  
     if (data.filename) {
       dirname = data.filename.split(".")[0];
       filepath = "http://localhost:3000/videos/tmp/" + data.filename;
